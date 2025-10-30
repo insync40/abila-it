@@ -46,6 +46,58 @@ export function initRiveAnimation() {
 			},
 		],
 	});
+	riveManager.registerAnimationSet("homebentowhite_01", {
+		riveUrl: rSource
+			? rSource.dataset.riveUrl
+			: "../assets/animations/insync-abila-homepage.riv",
+		defaultStateMachine: "State Machine 1",
+		defaultTrigger: "Play",
+		canvasConfigs: [
+			{
+				canvasId: "homebentowhite_01",
+				artboard: "homebentowhite_01",
+			},
+		],
+	});
+	riveManager.registerAnimationSet("homebentowhite_02", {
+		riveUrl: rSource
+			? rSource.dataset.riveUrl
+			: "../assets/animations/insync-abila-homepage.riv",
+		defaultStateMachine: "State Machine 1",
+		defaultTrigger: "Play",
+		canvasConfigs: [
+			{
+				canvasId: "homebentowhite_02",
+				artboard: "homebentowhite_02",
+			},
+		],
+	});
+	riveManager.registerAnimationSet("homebentowhite_03", {
+		riveUrl: rSource
+			? rSource.dataset.riveUrl
+			: "../assets/animations/insync-abila-homepage.riv",
+		defaultStateMachine: "State Machine 1",
+		defaultTrigger: "Play",
+		canvasConfigs: [
+			{
+				canvasId: "homebentowhite_03",
+				artboard: "homebentowhite_03",
+			},
+		],
+	});
+	riveManager.registerAnimationSet("homebentowhite_04", {
+		riveUrl: rSource
+			? rSource.dataset.riveUrl
+			: "../assets/animations/insync-abila-homepage.riv",
+		defaultStateMachine: "State Machine 1",
+		defaultTrigger: "Play",
+		canvasConfigs: [
+			{
+				canvasId: "homebentowhite_04",
+				artboard: "homebentowhite_04",
+			},
+		],
+	});
 
 	riveManager.initAllAnimationSets();
 }
