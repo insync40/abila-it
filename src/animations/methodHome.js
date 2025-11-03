@@ -6,10 +6,46 @@ gsap.registerPlugin(ScrollTrigger);
 export function initMethodHomeAnimation() {
 	const section = document.querySelector(".method_home_wrap");
 	const rSource = document.querySelector("#homeRiveSrc");
+	let swiperInstance = null;
 
 	if (!section) return;
 
-	gsap.context(() => {
+	function initSwiper() {
+		if (swiperInstance) {
+			swiperInstance.destroy(true, true);
+			swiperInstance = null;
+		}
+
+		swiperInstance = new Swiper(".swiper.is-method", {
+			effect: "coverflow",
+			direction: "horizontal",
+			centeredSlides: true,
+			initialSlide: 1,
+			slidesPerView: "auto",
+			spaceBetween: 48,
+			allowTouchMove: true,
+			speed: 1000,
+			// loop: true,
+			mousewheel: {
+				forceToAxis: true,
+				enabled: true,
+				sensitivity: 0.25,
+			},
+			// navigation: {
+			// 	nextEl: ".next",
+			// 	prevEl: ".prev",
+			// },
+			coverflowEffect: {
+				rotate: 0,
+				stretch: 0,
+				depth: 150,
+				modifier: 1,
+				slideShadows: false,
+			},
+		});
+	}
+
+	gsap.context((self) => {
 		let mm = gsap.matchMedia();
 
 		mm.add("(min-width: 992px)", () => {
@@ -97,6 +133,9 @@ export function initMethodHomeAnimation() {
 					console.error("Failed to create Rive instance:", err);
 				}
 			});
+
+			// Init swiper
+			initSwiper();
 
 			// cleanup when this media query is torn down
 			return () => {

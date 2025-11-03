@@ -5,6 +5,7 @@ import { initPercheHomeAnimation } from "./animations/percheHome.js";
 import { initCtaAnimation } from "./animations/ctaAnimation.js";
 import Lenis from "lenis";
 import { initMethodHomeAnimation } from "./animations/methodHome.js";
+import { initCircleAnimation } from "./animations/circleAnimation.js";
 
 let lenis = new Lenis({
 	lerp: 0.125,
@@ -28,4 +29,5 @@ document.addEventListener("DOMContentLoaded", () => {
 	initMethodHomeAnimation();
 	initPercheHomeAnimation();
 	initCtaAnimation();
+	initCircleAnimation();
 });
