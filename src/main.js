@@ -9,6 +9,7 @@ import { initMethodHomeAnimation } from "./animations/methodHome.js";
 import { initCircleAnimation } from "./animations/circleAnimation.js";
 import { initFadeAnimation } from "./animations/fadeAnimation.js";
 import { initHomeAnimation } from "./animations/heroHomeAnimation.js";
+import { initMethodSecondAnimation } from "./animations/methodSecondAnimation.js";
 
 let lenis = new Lenis({
 	lerp: 0.125,
@@ -33,6 +34,7 @@ document.addEventListener("DOMContentLoaded", () => {
 	initPercheHomeAnimation();
 	initCircleAnimation();
 	initHomeAnimation();
+	initMethodSecondAnimation();
 
 	// fade animation
 	const fadeElements = gsap.utils.toArray("[data-animation='fade-in']");
