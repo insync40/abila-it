@@ -1,3 +1,4 @@
+import gsap from "gsap";
 import { preloadImages } from "./utils/preloadImages";
 import { initHeroHomeAnimation } from "./animations/heroHome.js";
 import { initServiceHomeAnimation } from "./animations/serviceHome.js";
@@ -6,7 +7,8 @@ import { initCtaAnimation } from "./animations/ctaAnimation.js";
 import Lenis from "lenis";
 import { initMethodHomeAnimation } from "./animations/methodHome.js";
 import { initCircleAnimation } from "./animations/circleAnimation.js";
-import { initPartnerMarqueeAnimation } from "./animations/partnerMarqueeAnimation.js";
+import { initFadeAnimation } from "./animations/fadeAnimation.js";
+import { initHomeAnimation } from "./animations/heroHomeAnimation.js";
 
 let lenis = new Lenis({
 	lerp: 0.125,
@@ -29,6 +31,12 @@ document.addEventListener("DOMContentLoaded", () => {
 	initServiceHomeAnimation();
 	initMethodHomeAnimation();
 	initPercheHomeAnimation();
-	initCtaAnimation();
 	initCircleAnimation();
+	initHomeAnimation();
+
+	// fade animation
+	const fadeElements = gsap.utils.toArray("[data-animation='fade-in']");
+	fadeElements.forEach((element) => {
+		initFadeAnimation(element, { duration: 1, easing: "power2.out" });
+	});
 });
