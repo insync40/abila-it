@@ -6,6 +6,7 @@ import { initCtaAnimation } from "./animations/ctaAnimation.js";
 import Lenis from "lenis";
 import { initMethodHomeAnimation } from "./animations/methodHome.js";
 import { initCircleAnimation } from "./animations/circleAnimation.js";
+import { initPartnerMarqueeAnimation } from "./animations/partnerMarqueeAnimation.js";
 
 let lenis = new Lenis({
 	lerp: 0.125,

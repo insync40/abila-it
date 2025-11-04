@@ -36,7 +36,7 @@ export function initCircleAnimation() {
 		positionCircles();
 
 		window.addEventListener("resize", () => {
-			gsap.delayedCall(0.2, onResize);
+			gsap.delayedCall(0.2, positionCircles);
 		});
 
 		// Optional: Add rotation animation
