@@ -1,4 +1,6 @@
 import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { Rive } from "@rive-app/webgl2";
 
 export function initHeroHomeAnimation() {
 	const section = document.querySelector(".main_hero_wrap");
@@ -9,11 +11,10 @@ export function initHeroHomeAnimation() {
 	gsap.context(() => {
 		let mm = gsap.matchMedia();
 
-		mm.add("(min-width: 992px)", () => {
+		mm.add("(min-width: 320px)", () => {
 			const riveUrl = rSource?.dataset?.riveUrl;
 			const stateMachine =
-				rSource?.dataset?.riveStateMachine ||
-				rSource?.dataset?.stateMachine;
+				rSource?.dataset?.riveStateMachine || "State Machine 1";
 
 			if (!riveUrl) {
 				console.error(
@@ -46,12 +47,12 @@ export function initHeroHomeAnimation() {
 				if (!el) return;
 
 				try {
-					const instance = new rive.Rive({
+					const instance = new Rive({
 						src: riveUrl,
 						canvas: el,
 						stateMachines: sm,
 						artboard,
-						autoplay: true,
+						autoplay: false,
 						isTouchScrollEnabled: true,
 						onLoad: () => {
 							// resize and trigger "Play" if state machine has it
@@ -85,6 +86,24 @@ export function initHeroHomeAnimation() {
 					});
 
 					riveInstances.push(instance);
+
+					const handlePlay = () => {
+						instance.play();
+					};
+
+					const handlePause = () => {
+						instance.pause();
+					};
+
+					ScrollTrigger.create({
+						trigger: el,
+						start: "top bottom",
+						end: "bottom top",
+						onEnter: handlePlay,
+						onLeave: handlePause,
+						onEnterBack: handlePlay,
+						onLeaveBack: handlePause,
+					});
 				} catch (err) {
 					console.error("Failed to create Rive instance:", err);
 				}

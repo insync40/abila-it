@@ -1,5 +1,6 @@
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { Rive } from "@rive-app/webgl2";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -12,7 +13,7 @@ export function initPercheHomeAnimation() {
 	gsap.context(() => {
 		let mm = gsap.matchMedia();
 
-		mm.add("(min-width: 992px)", () => {
+		mm.add("(min-width: 320px)", () => {
 			const riveUrl = rSource?.dataset?.riveUrl;
 			const stateMachine =
 				rSource?.dataset?.riveStateMachine ||
@@ -48,12 +49,12 @@ export function initPercheHomeAnimation() {
 				if (!el) return;
 
 				try {
-					const instance = new rive.Rive({
+					const instance = new Rive({
 						src: riveUrl,
 						canvas: el,
 						stateMachines: sm,
 						artboard,
-						autoplay: true,
+						autoplay: false,
 						isTouchScrollEnabled: true,
 						onLoad: () => {
 							try {
@@ -73,14 +74,7 @@ export function initPercheHomeAnimation() {
 										playTrigger &&
 										typeof playTrigger.fire === "function"
 									) {
-										ScrollTrigger.create({
-											trigger: section,
-											start: "top center",
-											onEnter: () => {
-												playTrigger.fire();
-											},
-										});
-										// playTrigger.fire();
+										playTrigger.fire();
 									}
 								} catch (e) {
 									// ignore state machine input errors
@@ -93,6 +87,24 @@ export function initPercheHomeAnimation() {
 					});
 
 					riveInstances.push(instance);
+
+					const handlePlay = () => {
+						instance.play();
+					};
+
+					const handlePause = () => {
+						instance.pause();
+					};
+
+					ScrollTrigger.create({
+						trigger: el,
+						start: "top bottom",
+						end: "bottom top",
+						onEnter: handlePlay,
+						onLeave: handlePause,
+						onEnterBack: handlePlay,
+						onLeaveBack: handlePause,
+					});
 				} catch (err) {
 					console.error("Failed to create Rive instance:", err);
 				}

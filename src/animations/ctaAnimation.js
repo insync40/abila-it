@@ -1,10 +1,13 @@
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { Alignment, Fit, Rive } from "@rive-app/webgl2";
+import { Layout } from "@rive-app/webgl2";
 
 gsap.registerPlugin(ScrollTrigger);
 
 export function initCtaAnimation() {
 	const section = document.querySelector(".cta_wrap");
+	const ctaBtn = section.querySelector(".button_main_wrap");
 	const rCtaSource = document.querySelector("#rCtaSource");
 
 	if (!section) return;
@@ -12,7 +15,7 @@ export function initCtaAnimation() {
 	gsap.context(() => {
 		let mm = gsap.matchMedia();
 
-		mm.add("(min-width: 992px)", () => {
+		mm.add("(min-width: 320px)", () => {
 			const riveUrl = rCtaSource?.dataset?.riveUrl;
 			const stateMachine =
 				rCtaSource?.dataset?.riveStateMachine ||
@@ -40,12 +43,16 @@ export function initCtaAnimation() {
 				if (!el) return;
 
 				try {
-					const instance = new rive.Rive({
+					const instance = new Rive({
 						src: riveUrl,
 						canvas: el,
 						stateMachines: sm,
 						artboard,
-						autoplay: true,
+						autoplay: false,
+						layout: new Layout({
+							fit: Fit.Cover,
+							alignment: Alignment.BottomCenter,
+						}),
 						isTouchScrollEnabled: true,
 						onLoad: () => {
 							try {
@@ -61,19 +68,43 @@ export function initCtaAnimation() {
 									const playTrigger =
 										inputs &&
 										inputs.find((i) => i.name === "play");
+									const hoverTrigger =
+										inputs &&
+										inputs.find((i) => i.name === "hover");
+
+									let hoverState = false;
 									if (
 										playTrigger &&
 										typeof playTrigger.fire === "function"
 									) {
-										ScrollTrigger.create({
-											trigger: section,
-											start: "top center",
-											onEnter: () => {
-												playTrigger.fire();
-											},
-										});
-										// playTrigger.fire();
+										playTrigger.fire();
 									}
+
+									// Add hover event listeners
+									if (
+										hoverTrigger &&
+										typeof hoverTrigger.fire === "function"
+									) {
+										ctaBtn.addEventListener(
+											"mouseenter",
+											() => {
+												if (!hoverState) {
+													hoverTrigger.fire();
+													hoverState = true;
+												}
+											}
+										);
+									}
+
+									ctaBtn.addEventListener(
+										"mouseleave",
+										() => {
+											if (hoverState) {
+												hoverTrigger.fire();
+												hoverState = false;
+											}
+										}
+									);
 								} catch (e) {
 									// ignore state machine input errors
 								}
@@ -85,6 +116,24 @@ export function initCtaAnimation() {
 					});
 
 					riveInstances.push(instance);
+
+					const handlePlay = () => {
+						instance.play();
+					};
+
+					const handlePause = () => {
+						instance.pause();
+					};
+
+					ScrollTrigger.create({
+						trigger: el,
+						start: "top bottom",
+						end: "bottom top",
+						onEnter: handlePlay,
+						onLeave: handlePause,
+						onEnterBack: handlePlay,
+						onLeaveBack: handlePause,
+					});
 				} catch (err) {
 					console.error("Failed to create Rive instance:", err);
 				}

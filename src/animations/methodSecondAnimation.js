@@ -1,5 +1,6 @@
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { Rive } from "@rive-app/webgl2";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -10,7 +11,7 @@ export function initMethodSecondAnimation() {
 
 	gsap.context((self) => {
 		let mm = gsap.matchMedia();
-		mm.add("(min-width: 992px)", () => {
+		mm.add("(min-width: 320px)", () => {
 			const riveUrl = rSource?.dataset?.riveUrl;
 			const stateMachine =
 				rSource?.dataset?.riveStateMachine ||
@@ -50,12 +51,12 @@ export function initMethodSecondAnimation() {
 				if (!el) return;
 
 				try {
-					const instance = new rive.Rive({
+					const instance = new Rive({
 						src: riveUrl,
 						canvas: el,
 						stateMachines: sm,
 						artboard,
-						autoplay: true,
+						autoplay: false,
 						isTouchScrollEnabled: true,
 						onLoad: () => {
 							try {
@@ -75,15 +76,7 @@ export function initMethodSecondAnimation() {
 										playTrigger &&
 										typeof playTrigger.fire === "function"
 									) {
-										ScrollTrigger.create({
-											trigger: el,
-											start: "top center",
-											end: "bottom center",
-											onEnter: () => {
-												playTrigger.fire();
-											},
-										});
-										// playTrigger.fire();
+										playTrigger.fire();
 									}
 								} catch (e) {
 									// ignore state machine input errors
@@ -96,6 +89,24 @@ export function initMethodSecondAnimation() {
 					});
 
 					riveInstances.push(instance);
+
+					const handlePlay = () => {
+						instance.play();
+					};
+
+					const handlePause = () => {
+						instance.pause();
+					};
+
+					ScrollTrigger.create({
+						trigger: el,
+						start: "top center+=20%",
+						end: "bottom center-=20%",
+						onEnter: handlePlay,
+						onLeave: handlePause,
+						onEnterBack: handlePlay,
+						onLeaveBack: handlePause,
+					});
 				} catch (err) {
 					console.error("Failed to create Rive instance:", err);
 				}

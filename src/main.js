@@ -1,10 +1,10 @@
 import gsap from "gsap";
+import Lenis from "lenis";
 import { preloadImages } from "./utils/preloadImages";
 import { initHeroHomeAnimation } from "./animations/heroHome.js";
 import { initServiceHomeAnimation } from "./animations/serviceHome.js";
 import { initPercheHomeAnimation } from "./animations/percheHome.js";
 import { initCtaAnimation } from "./animations/ctaAnimation.js";
-import Lenis from "lenis";
 import { initMethodHomeAnimation } from "./animations/methodHome.js";
 import { initCircleAnimation } from "./animations/circleAnimation.js";
 import { initFadeAnimation } from "./animations/fadeAnimation.js";
@@ -41,6 +41,7 @@ document.addEventListener("DOMContentLoaded", () => {
 	autoInitPricingToggle();
 	initBentoBlackAnimation();
 	initBentoWhiteAnimation();
+	initCtaAnimation();
 
 	// fade animation
 	const fadeElements = gsap.utils.toArray("[data-animation='fade-in']");
