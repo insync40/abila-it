@@ -10,6 +10,9 @@ import { initCircleAnimation } from "./animations/circleAnimation.js";
 import { initFadeAnimation } from "./animations/fadeAnimation.js";
 import { initHomeAnimation } from "./animations/heroHomeAnimation.js";
 import { initMethodSecondAnimation } from "./animations/methodSecondAnimation.js";
+import { autoInitPricingToggle } from "./utils/pricingToggle.js";
+import { initBentoBlackAnimation } from "./animations/bentoBlackAnimation.js";
+import { initBentoWhiteAnimation } from "./animations/bentoWhiteAnimation.js";
 
 let lenis = new Lenis({
 	lerp: 0.125,
@@ -35,6 +38,9 @@ document.addEventListener("DOMContentLoaded", () => {
 	initCircleAnimation();
 	initHomeAnimation();
 	initMethodSecondAnimation();
+	autoInitPricingToggle();
+	initBentoBlackAnimation();
+	initBentoWhiteAnimation();
 
 	// fade animation
 	const fadeElements = gsap.utils.toArray("[data-animation='fade-in']");

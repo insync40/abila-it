@@ -84,7 +84,6 @@ export function initServiceHomeAnimation() {
 												playTrigger.fire();
 											},
 										});
-										// playTrigger.fire();
 									}
 								} catch (e) {
 									// ignore state machine input errors

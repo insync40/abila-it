@@ -3,13 +3,15 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
 
-export function initMethodSecondAnimation() {
-	const section = document.querySelector(".method_2_wrap");
-	const rSource = document.querySelector("#methodRiveSrc");
-	if (!section) return;
+export function initBentoWhiteAnimation() {
+	const wrapper = document.querySelector("[data-rive='bento-white']");
+	const rSource = document.querySelector("#servicesRiveSrc");
+
+	if (!wrapper) return;
 
 	gsap.context((self) => {
 		let mm = gsap.matchMedia();
+
 		mm.add("(min-width: 992px)", () => {
 			const riveUrl = rSource?.dataset?.riveUrl;
 			const stateMachine =
@@ -18,27 +20,23 @@ export function initMethodSecondAnimation() {
 
 			if (!riveUrl) {
 				console.error(
-					"Missing Rive URL in #methodRiveSrc dataset (riveUrl)."
+					"Missing Rive URL in #homeRiveSrc dataset (riveUrl)."
 				);
 				return;
 			}
 
 			const canvases = [
 				{
-					el: document.querySelector("#graphic_01"),
-					artboard: "graphic_01",
+					el: document.querySelector("#bentowhite_01"),
+					artboard: "bentowhite_01",
 				},
 				{
-					el: document.querySelector("#graphic_02"),
-					artboard: "graphic_02",
+					el: document.querySelector("#bentowhite_02"),
+					artboard: "bentowhite_02",
 				},
 				{
-					el: document.querySelector("#graphic_03"),
-					artboard: "graphic_03",
-				},
-				{
-					el: document.querySelector("#graphic_04"),
-					artboard: "graphic_04",
+					el: document.querySelector("#bentowhite_03"),
+					artboard: "bentowhite_03",
 				},
 			];
 
@@ -76,9 +74,8 @@ export function initMethodSecondAnimation() {
 										typeof playTrigger.fire === "function"
 									) {
 										ScrollTrigger.create({
-											trigger: el,
+											trigger: wrapper,
 											start: "top center",
-											end: "bottom center",
 											onEnter: () => {
 												playTrigger.fire();
 											},
@@ -118,5 +115,5 @@ export function initMethodSecondAnimation() {
 				});
 			};
 		});
-	}, section);
+	}, wrapper);
 }
