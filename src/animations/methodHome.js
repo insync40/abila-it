@@ -146,9 +146,6 @@ export function initMethodHomeAnimation() {
 				}
 			});
 
-			// Init swiper
-			initSwiper();
-
 			// cleanup when this media query is torn down
 			return () => {
 				riveInstances.forEach((inst) => {
@@ -164,6 +161,17 @@ export function initMethodHomeAnimation() {
 						// swallow cleanup errors
 					}
 				});
+			};
+		});
+
+		mm.add("(min-width: 992px)", () => {
+			initSwiper();
+
+			return () => {
+				if (swiperInstance) {
+					swiperInstance.destroy(true, true);
+					swiperInstance = null;
+				}
 			};
 		});
 	}, section);
