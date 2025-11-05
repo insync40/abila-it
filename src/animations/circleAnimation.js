@@ -8,15 +8,14 @@ export function initCircleAnimation() {
 	gsap.context((self) => {
 		const circles = self.selector(".circle_logo");
 
-		// set initial positions based on wrap length
 		const positionCircles = () => {
 			const wrapRect = wrap.getBoundingClientRect();
 			const wrapCenterX = wrapRect.left + wrapRect.width / 2;
 			const wrapCenterY = wrapRect.top + wrapRect.height / 2;
-			const radius = Math.min(wrapRect.width, wrapRect.height) / 2 - 50; // 50px padding
+			const radius = Math.min(wrapRect.width, wrapRect.height) / 2;
 
 			circles.forEach((circle, index) => {
-				const angle = (index / circles.length) * Math.PI * 2; // distribute evenly
+				const angle = (index / circles.length) * Math.PI * 2;
 				const x =
 					wrapCenterX +
 					radius * Math.cos(angle) -
@@ -35,25 +34,46 @@ export function initCircleAnimation() {
 
 		positionCircles();
 
+		const tl = gsap.timeline({
+			scrollTrigger: {
+				trigger: wrap,
+				start: "top bottom",
+				end: "bottom top",
+				invalidateOnRefresh: true,
+				onEnter: () => tl.play(),
+				onLeave: () => tl.pause(),
+				onEnterBack: () => tl.play(),
+				onLeaveBack: () => tl.pause(),
+			},
+			paused: true,
+		});
+
+		tl.to(
+			wrap,
+			{
+				rotation: 360,
+				transformOrigin: "50% 50%",
+				ease: "none",
+				duration: 60,
+				repeat: -1,
+			},
+			0
+		);
+
+		tl.to(
+			circles,
+			{
+				rotation: -360,
+				transformOrigin: "50% 50%",
+				ease: "none",
+				duration: 60,
+				repeat: -1,
+			},
+			0
+		);
+
 		window.addEventListener("resize", () => {
-			gsap.delayedCall(0.2, positionCircles);
-		});
-
-		// Optional: Add rotation animation
-		gsap.to(wrap, {
-			rotation: 360,
-			transformOrigin: "50% 50%",
-			ease: "none",
-			duration: 60,
-			repeat: -1,
-		});
-
-		gsap.to(circles, {
-			rotation: -360,
-			transformOrigin: "50% 50%",
-			ease: "none",
-			duration: 60,
-			repeat: -1,
+			positionCircles();
 		});
 	}, wrap);
 }
