@@ -97,7 +97,7 @@ export function initRocketAnimation() {
 
 					ScrollTrigger.create({
 						trigger: el,
-						start: "top bottom-=20%",
+						start: "top bottom-=05%",
 						end: "bottom top",
 						onEnter: handlePlay,
 						onLeave: handlePause,
