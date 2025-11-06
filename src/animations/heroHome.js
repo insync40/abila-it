@@ -1,6 +1,6 @@
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { Rive } from "@rive-app/webgl2";
+import { Rive, Layout, Fit, Alignment } from "@rive-app/webgl2";
 
 export function initHeroHomeAnimation() {
 	const section = document.querySelector(".main_hero_wrap");
@@ -11,7 +11,7 @@ export function initHeroHomeAnimation() {
 	gsap.context(() => {
 		let mm = gsap.matchMedia();
 
-		mm.add("(min-width: 320px)", () => {
+		mm.add("(min-width: 992px)", () => {
 			const riveUrl = rSource?.dataset?.riveUrl;
 			const stateMachine =
 				rSource?.dataset?.riveStateMachine || "State Machine 1";
@@ -53,6 +53,10 @@ export function initHeroHomeAnimation() {
 						stateMachines: sm,
 						artboard,
 						autoplay: false,
+						layout: new Layout({
+							fit: Fit.Cover,
+							alignment: Alignment.Center,
+						}),
 						isTouchScrollEnabled: true,
 						onLoad: () => {
 							// resize and trigger "Play" if state machine has it

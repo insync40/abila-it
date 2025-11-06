@@ -1,16 +1,21 @@
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import Lenis from "lenis";
 
 gsap.registerPlugin(ScrollTrigger);
 
-export function initHomeAnimation() {
+export function initHomeAnimation(lenis) {
 	const section = document.querySelector(".main_hero_wrap");
 
 	if (!section) return;
 
+	// ensure the page is on top on load
+	lenis.scrollTo(0, { immediate: true });
+
 	gsap.context((self) => {
 		const headerWrap = section.querySelector(".main_hero_head_wrap");
 		const visualWrap = section.querySelector(".main_hero_visual_wrap");
+		const galaxyVisual = section.querySelector(".hero_bg_galaxy");
 
 		const cards = gsap.utils.toArray("[data-animation]", section);
 		const trigger = section.querySelector("[data-trigger]");
@@ -35,9 +40,9 @@ export function initHomeAnimation() {
 					const tl = gsap.timeline({
 						scrollTrigger: {
 							trigger: section,
-							start: "top top",
+							start: "clamp(top top)",
 							endTrigger: visualWrap,
-							end: "top top",
+							end: "clamp(top top)",
 							scrub: true,
 						},
 						defaults: { ease: "none" },
@@ -54,12 +59,15 @@ export function initHomeAnimation() {
 					const secondTl = gsap.timeline({
 						scrollTrigger: {
 							trigger: visualWrap,
-							start: "center center",
+							start: "clamp(center center)",
 							endTrigger: trigger,
-							end: "bottom bottom",
+							end: "clamp(bottom bottom)",
 							scrub: true,
 							pin: true,
 							pinSpacing: false,
+						},
+						defaults: {
+							overwrite: "auto",
 						},
 					});
 
@@ -83,9 +91,27 @@ export function initHomeAnimation() {
 								autoAlpha: 0,
 								ease: "none",
 							},
-							"<"
+							0
 						);
 					});
+
+					const thirdTl = gsap.timeline({
+						scrollTrigger: {
+							trigger: section,
+							start: "clamp(top top)",
+							end: "clamp(bottom top)",
+							scrub: true,
+						},
+					});
+
+					thirdTl.to(
+						galaxyVisual,
+						{
+							backgroundPosition: "50% -50%",
+							ease: "none",
+						},
+						0
+					);
 				}
 				// end dekstop
 			}

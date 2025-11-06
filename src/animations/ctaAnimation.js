@@ -1,7 +1,6 @@
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { Alignment, Fit, Rive } from "@rive-app/webgl2";
-import { Layout } from "@rive-app/webgl2";
+import { Layout, Alignment, Fit, Rive } from "@rive-app/webgl2";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -18,8 +17,7 @@ export function initCtaAnimation() {
 		mm.add("(min-width: 320px)", () => {
 			const riveUrl = rCtaSource?.dataset?.riveUrl;
 			const stateMachine =
-				rCtaSource?.dataset?.riveStateMachine ||
-				rCtaSource?.dataset?.stateMachine;
+				rCtaSource?.dataset?.riveStateMachine || "State Machine 1";
 
 			if (!riveUrl) {
 				console.error(
@@ -50,8 +48,8 @@ export function initCtaAnimation() {
 						artboard,
 						autoplay: false,
 						layout: new Layout({
-							fit: Fit.Cover,
-							alignment: Alignment.BottomCenter,
+							fit: Fit.FitHeight,
+							alignment: Alignment.TopCenter,
 						}),
 						isTouchScrollEnabled: true,
 						onLoad: () => {
@@ -65,22 +63,13 @@ export function initCtaAnimation() {
 								try {
 									const inputs =
 										instance.stateMachineInputs(sm);
-									const playTrigger =
-										inputs &&
-										inputs.find((i) => i.name === "play");
+
 									const hoverTrigger =
 										inputs &&
 										inputs.find((i) => i.name === "hover");
 
 									let hoverState = false;
-									if (
-										playTrigger &&
-										typeof playTrigger.fire === "function"
-									) {
-										playTrigger.fire();
-									}
 
-									// Add hover event listeners
 									if (
 										hoverTrigger &&
 										typeof hoverTrigger.fire === "function"
@@ -94,17 +83,17 @@ export function initCtaAnimation() {
 												}
 											}
 										);
-									}
 
-									ctaBtn.addEventListener(
-										"mouseleave",
-										() => {
-											if (hoverState) {
-												hoverTrigger.fire();
-												hoverState = false;
+										ctaBtn.addEventListener(
+											"mouseleave",
+											() => {
+												if (hoverState) {
+													hoverTrigger.fire();
+													hoverState = false;
+												}
 											}
-										}
-									);
+										);
+									}
 								} catch (e) {
 									// ignore state machine input errors
 								}

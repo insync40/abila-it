@@ -1,6 +1,6 @@
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { Rive } from "@rive-app/webgl2";
+import { Rive, Layout, Fit, Alignment } from "@rive-app/webgl2";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -26,7 +26,7 @@ export function initMethodHomeAnimation() {
 			spaceBetween: 48,
 			allowTouchMove: true,
 			speed: 1000,
-			// loop: true,
+			loop: true,
 			mousewheel: {
 				forceToAxis: true,
 				enabled: true,
@@ -39,7 +39,7 @@ export function initMethodHomeAnimation() {
 			coverflowEffect: {
 				rotate: 0,
 				stretch: 0,
-				depth: 150,
+				depth: 0,
 				modifier: 1,
 				slideShadows: false,
 			},
@@ -52,8 +52,7 @@ export function initMethodHomeAnimation() {
 		mm.add("(min-width: 320px)", () => {
 			const riveUrl = rSource?.dataset?.riveUrl;
 			const stateMachine =
-				rSource?.dataset?.riveStateMachine ||
-				rSource?.dataset?.stateMachine;
+				rSource?.dataset?.riveStateMachine || "State Machine 1";
 
 			if (!riveUrl) {
 				console.error(
@@ -91,6 +90,10 @@ export function initMethodHomeAnimation() {
 						stateMachines: sm,
 						artboard,
 						autoplay: false,
+						layout: new Layout({
+							fit: Fit.Cover,
+							alignment: Alignment.Center,
+						}),
 						isTouchScrollEnabled: true,
 						onLoad: () => {
 							try {

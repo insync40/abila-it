@@ -30,12 +30,12 @@ function raf(time) {
 requestAnimationFrame(raf);
 
 document.addEventListener("DOMContentLoaded", () => {
+	initHomeAnimation(lenis);
 	initHeroHomeAnimation();
 	initServiceHomeAnimation();
 	initMethodHomeAnimation();
 	initPercheHomeAnimation();
 	initCircleAnimation();
-	initHomeAnimation();
 	initMethodSecondAnimation();
 	autoInitPricingToggle();
 	initBentoBlackAnimation();

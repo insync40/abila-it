@@ -1,6 +1,6 @@
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { Rive } from "@rive-app/webgl2";
+import { Alignment, Fit, Layout, Rive } from "@rive-app/webgl2";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -16,8 +16,7 @@ export function initBentoBlackAnimation() {
 		mm.add("(min-width: 320px)", () => {
 			const riveUrl = rSource?.dataset?.riveUrl;
 			const stateMachine =
-				rSource?.dataset?.riveStateMachine ||
-				rSource?.dataset?.stateMachine;
+				rSource?.dataset?.riveStateMachine || "State Machine 1";
 
 			if (!riveUrl) {
 				console.error(
@@ -56,6 +55,10 @@ export function initBentoBlackAnimation() {
 						artboard,
 						autoplay: false,
 						isTouchScrollEnabled: true,
+						layout: new Layout({
+							fit: Fit.Cover,
+							alignment: Alignment.Center,
+						}),
 						onLoad: () => {
 							try {
 								instance.resizeDrawingSurfaceToCanvas();
