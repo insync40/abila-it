@@ -7,11 +7,12 @@ import { initCtaAnimation } from "./animations/ctaAnimation.js";
 import { initMethodHomeAnimation } from "./animations/methodHome.js";
 import { initCircleAnimation } from "./animations/circleAnimation.js";
 import { initFadeAnimation } from "./animations/fadeAnimation.js";
-import { initHomeAnimation } from "./animations/heroHomeAnimation.js";
+import { initHomeAnimation } from "./animations/homeAnimation.js";
 import { initMethodSecondAnimation } from "./animations/methodSecondAnimation.js";
 import { autoInitPricingToggle } from "./utils/pricingToggle.js";
 import { initBentoBlackAnimation } from "./animations/bentoBlackAnimation.js";
 import { initBentoWhiteAnimation } from "./animations/bentoWhiteAnimation.js";
+import { initRocketAnimation } from "./animations/rocketAnimation.js";
 
 let lenis = new Lenis({
 	lerp: 0.125,
@@ -31,6 +32,7 @@ requestAnimationFrame(raf);
 
 document.addEventListener("DOMContentLoaded", () => {
 	initHomeAnimation(lenis);
+	initRocketAnimation();
 	initHeroHomeAnimation();
 	initServiceHomeAnimation();
 	initMethodHomeAnimation();
