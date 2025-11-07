@@ -10,9 +10,10 @@ import { initFadeAnimation } from "./animations/fadeAnimation.js";
 import { initHomeAnimation } from "./animations/homeAnimation.js";
 import { initMethodSecondAnimation } from "./animations/methodSecondAnimation.js";
 import { autoInitPricingToggle } from "./utils/pricingToggle.js";
+import { initRocketAnimation } from "./animations/rocketAnimation.js";
 import { initBentoBlackAnimation } from "./animations/bentoBlackAnimation.js";
 import { initBentoWhiteAnimation } from "./animations/bentoWhiteAnimation.js";
-import { initRocketAnimation } from "./animations/rocketAnimation.js";
+import { initServicePageAnimation } from "./animations/servicesPageAnimation.js";
 
 let lenis = new Lenis({
 	lerp: 0.125,
@@ -40,8 +41,9 @@ document.addEventListener("DOMContentLoaded", () => {
 	initCircleAnimation();
 	initMethodSecondAnimation();
 	autoInitPricingToggle();
-	initBentoBlackAnimation();
 	initBentoWhiteAnimation();
+	initBentoBlackAnimation();
+	// initServicePageAnimation();
 	initCtaAnimation();
 
 	// fade animation

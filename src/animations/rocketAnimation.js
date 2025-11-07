@@ -1,6 +1,8 @@
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Rive, Layout, Fit, Alignment } from "@rive-app/webgl2";
+import { loadRiveFile } from "../utils/loadRiveFile";
+import { setupRiveInstance } from "../utils/setupRiveInstance";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -128,3 +130,40 @@ export function initRocketAnimation() {
 		});
 	});
 }
+
+// export function initRocketAnimation() {
+// 	const section = document.querySelector(".main_hero_wrap");
+// 	const rSource = section?.querySelector("#rocketRiveSrc");
+
+// 	if (!section) return;
+
+// 	gsap.context((self) => {
+// 		let mm = gsap.matchMedia();
+
+// 		mm.add("(min-width: 320px)", () => {
+// 			const riveUrl = rSource?.dataset?.riveUrl;
+
+// 			if (!riveUrl) {
+// 				console.error(
+// 					"Missing Rive URL in #rocketRiveSrc dataset (riveUrl)."
+// 				);
+// 				return;
+// 			}
+
+// 			loadRiveFile(
+// 				riveUrl,
+// 				(file) => {
+// 					setupRiveInstance(
+// 						file,
+// 						"rocket_glow",
+// 						"rocket_glow",
+// 						"State Machine 1"
+// 					);
+// 				},
+// 				(error) => {
+// 					console.error("Failed to load Rive file:", error);
+// 				}
+// 			);
+// 		});
+// 	});
+// }

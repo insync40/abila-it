@@ -10,7 +10,7 @@ export function initBentoWhiteAnimation() {
 
 	if (!wrapper) return;
 
-	gsap.context((self) => {
+	gsap.context(() => {
 		let mm = gsap.matchMedia();
 
 		mm.add("(min-width: 320px)", () => {

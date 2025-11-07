@@ -1,7 +1,10 @@
-import { Rive, Layout, Fit } from "@rive-app/canvas";
-import { loadRiveFile } from "./loadRiveFile.js";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { Rive, Layout, Fit } from "@rive-app/webgl2";
 
-export const riveInstances = [];
+gsap.registerPlugin(ScrollTrigger);
+
+const riveInstances = [];
 
 export function setupRiveInstance(
 	loadedRiveFile,
@@ -28,7 +31,8 @@ export function setupRiveInstance(
 			riveInstance.resizeDrawingSurfaceToCanvas();
 			if (stateMachine) {
 				try {
-					const inputs = instance.stateMachineInputs(sm);
+					const inputs =
+						riveInstance.stateMachineInputs(stateMachine);
 					const playTrigger =
 						inputs && inputs.find((i) => i.name === "play");
 					if (playTrigger && typeof playTrigger.fire === "function") {
@@ -42,23 +46,41 @@ export function setupRiveInstance(
 	});
 
 	riveInstances.push(riveInstance);
+
+	const handlePlay = () => {
+		riveInstance.play();
+	};
+
+	const handlePause = () => {
+		riveInstance.pause();
+	};
+
+	ScrollTrigger.create({
+		trigger: canvas,
+		start: "top bottom",
+		end: "bottom top",
+		onEnter: handlePlay,
+		onLeave: handlePause,
+		onEnterBack: handlePlay,
+		onLeaveBack: handlePause,
+	});
 }
 
-// Example Usage:
-loadRiveFile(
-	"rive's_animated_emojis.riv",
-	(file) => {
-		setupRiveInstance(file, "rive-canvas-1", "Mindblown", "controller");
-		setupRiveInstance(file, "rive-canvas-2", "Bullseye", "controller");
-		setupRiveInstance(file, "rive-canvas-3", "love", "controller");
-		setupRiveInstance(file, "rive-canvas-4", "joy", "controller");
-		setupRiveInstance(file, "rive-canvas-5", "Tada", "controller");
-		setupRiveInstance(file, "rive-canvas-6", "Onfire", "controller");
-	},
-	(error) => {
-		console.error("Failed to load Rive file:", error);
-	}
-);
+// // Example Usage:
+// loadRiveFile(
+// 	"rive's_animated_emojis.riv",
+// 	(file) => {
+// 		setupRiveInstance(file, "rive-canvas-1", "Mindblown", "controller");
+// 		setupRiveInstance(file, "rive-canvas-2", "Bullseye", "controller");
+// 		setupRiveInstance(file, "rive-canvas-3", "love", "controller");
+// 		setupRiveInstance(file, "rive-canvas-4", "joy", "controller");
+// 		setupRiveInstance(file, "rive-canvas-5", "Tada", "controller");
+// 		setupRiveInstance(file, "rive-canvas-6", "Onfire", "controller");
+// 	},
+// 	(error) => {
+// 		console.error("Failed to load Rive file:", error);
+// 	}
+// );
 
 window.addEventListener(
 	"resize",

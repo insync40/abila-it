@@ -21,9 +21,15 @@ export function initHomeAnimation(lenis) {
 		const trigger = section.querySelector("[data-trigger]");
 
 		// get center of visualWrap
-		const visualWrapCenter =
+		let visualWrapCenter =
 			visualWrap.getBoundingClientRect().left +
 			visualWrap.offsetWidth / 2;
+
+		window.addEventListener("resize", () => {
+			visualWrapCenter =
+				visualWrap.getBoundingClientRect().left +
+				visualWrap.offsetWidth / 2;
+		});
 
 		let mm = gsap.matchMedia();
 
@@ -65,6 +71,7 @@ export function initHomeAnimation(lenis) {
 							scrub: true,
 							pin: true,
 							pinSpacing: false,
+							invalidateOnRefresh: true,
 						},
 						defaults: {
 							overwrite: "auto",
@@ -77,7 +84,7 @@ export function initHomeAnimation(lenis) {
 							{
 								x: 0,
 								scale: 1,
-								autoAlpha: 1,
+								// autoAlpha: 1,
 								transformOrigin: "center bottom",
 							},
 							{
@@ -88,7 +95,7 @@ export function initHomeAnimation(lenis) {
 									return visualWrapCenter - cardCenter;
 								},
 								scale: 0,
-								autoAlpha: 0,
+								// autoAlpha: 0,
 								ease: "none",
 							},
 							0

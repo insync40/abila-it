@@ -75,13 +75,13 @@ export function initCircleAnimation() {
 				0
 			);
 
-			window.addEventListener("resize", () => {
-				positionCircles();
-			});
+			// window.addEventListener("resize", () => {
+			// 	positionCircles();
+			// });
 
 			return () => {
 				tl.kill();
-				window.removeEventListener("resize", positionCircles);
+				// window.removeEventListener("resize", positionCircles);
 			};
 		});
 	}, wrap);

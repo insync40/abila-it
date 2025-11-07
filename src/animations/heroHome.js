@@ -1,6 +1,8 @@
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { Rive, Layout, Fit, Alignment } from "@rive-app/webgl2";
+import { Alignment, Fit, Layout, Rive } from "@rive-app/webgl2";
+
+gsap.registerPlugin(ScrollTrigger);
 
 export function initHeroHomeAnimation() {
 	const section = document.querySelector(".main_hero_wrap");
@@ -132,3 +134,52 @@ export function initHeroHomeAnimation() {
 		});
 	}, section);
 }
+
+// export function initHeroHomeAnimation() {
+// 	const section = document.querySelector(".main_hero_wrap");
+// 	const rSource = document.querySelector("#homeRiveSrc");
+
+// 	if (!section) return;
+
+// 	gsap.context(() => {
+// 		let mm = gsap.matchMedia();
+
+// 		mm.add("(min-width: 992px)", () => {
+// 			const riveUrl = rSource?.dataset?.riveUrl;
+
+// 			if (!riveUrl) {
+// 				console.error(
+// 					"Missing Rive URL in #homeRiveSrc dataset (riveUrl)."
+// 				);
+// 				return;
+// 			}
+
+// 			loadRiveFile(
+// 				riveUrl,
+// 				(file) => {
+// 					setupRiveInstance(
+// 						file,
+// 						"floatingcardhero_01",
+// 						"floatingcardhero_01",
+// 						"State Machine 1"
+// 					);
+// 					setupRiveInstance(
+// 						file,
+// 						"floatingcardhero_02",
+// 						"floatingcardhero_02",
+// 						"State Machine 1"
+// 					);
+// 					setupRiveInstance(
+// 						file,
+// 						"floatingcardhero_03",
+// 						"floatingcardhero_03",
+// 						"State Machine 1"
+// 					);
+// 				},
+// 				(error) => {
+// 					console.error("Failed to load Rive file:", error);
+// 				}
+// 			);
+// 		});
+// 	}, section);
+// }
