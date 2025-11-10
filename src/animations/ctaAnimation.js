@@ -14,7 +14,7 @@ export function initCtaAnimation() {
 	gsap.context(() => {
 		let mm = gsap.matchMedia();
 
-		mm.add("(min-width: 320px)", () => {
+		mm.add("(min-width: 280px)", () => {
 			const riveUrl = rCtaSource?.dataset?.riveUrl;
 			const stateMachine =
 				rCtaSource?.dataset?.riveStateMachine || "State Machine 1";

@@ -11,7 +11,7 @@ export function initServicePageAnimation() {
 	gsap.context(() => {
 		let mm = gsap.matchMedia();
 
-		mm.add("(min-width: 320px)", () => {
+		mm.add("(min-width: 280px)", () => {
 			const riveUrl = rSource?.dataset?.riveUrl;
 
 			if (!riveUrl) {
