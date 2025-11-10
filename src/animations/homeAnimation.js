@@ -15,6 +15,7 @@ export function initHomeAnimation(lenis) {
 	gsap.context((self) => {
 		const headerWrap = section.querySelector(".main_hero_head_wrap");
 		const visualWrap = section.querySelector(".main_hero_visual_wrap");
+		const rocketEl = section.querySelector(".main_hero_visual_rocket_wrap");
 		const galaxyVisual = section.querySelector(".hero_bg_galaxy");
 
 		const cards = gsap.utils.toArray("[data-animation]", section);
@@ -40,6 +41,16 @@ export function initHomeAnimation(lenis) {
 			},
 			(context) => {
 				let { desktop, mobile } = context.conditions;
+				const rocketAnim = gsap.to(rocketEl, {
+					keyframes: {
+						yPercent: [0, -10, 10, -10, 0],
+						ease: "none",
+					},
+					duration: 10,
+					repeat: -1,
+					paused: true,
+				});
+
 				if (desktop) {
 					gsap.set(trigger, { height: "100svh" });
 
@@ -72,6 +83,18 @@ export function initHomeAnimation(lenis) {
 							pin: true,
 							pinSpacing: false,
 							invalidateOnRefresh: true,
+							onEnter: () => {
+								rocketAnim.play();
+							},
+							onLeave: () => {
+								if (rocketAnim) rocketAnim.pause();
+							},
+							onEnterBack: () => {
+								rocketAnim.play();
+							},
+							onLeaveBack: () => {
+								if (rocketAnim) rocketAnim.pause();
+							},
 						},
 						defaults: {
 							overwrite: "auto",

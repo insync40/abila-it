@@ -24,7 +24,7 @@ export function setupRiveInstance(
 		canvas: canvas,
 		artboard: artboard,
 		layout: new Layout({
-			fit: Fit.Cover,
+			fit: Fit.Contain,
 		}),
 		autoplay: false,
 		onLoad: () => {

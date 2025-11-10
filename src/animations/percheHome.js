@@ -55,7 +55,7 @@ export function initPercheHomeAnimation() {
 						artboard,
 						autoplay: false,
 						layout: new Layout({
-							fit: Fit.Cover,
+							fit: Fit.Contain,
 							alignment: Alignment.Center,
 						}),
 						isTouchScrollEnabled: true,

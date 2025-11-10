@@ -13,7 +13,7 @@ import { autoInitPricingToggle } from "./utils/pricingToggle.js";
 import { initRocketAnimation } from "./animations/rocketAnimation.js";
 import { initBentoBlackAnimation } from "./animations/bentoBlackAnimation.js";
 import { initBentoWhiteAnimation } from "./animations/bentoWhiteAnimation.js";
-import { initServicePageAnimation } from "./animations/servicesPageAnimation.js";
+import { initNavbarThemeSwitcher } from "./animations/navbarThemeSwitcher.js";
 
 let lenis = new Lenis({
 	lerp: 0.125,
@@ -45,6 +45,7 @@ document.addEventListener("DOMContentLoaded", () => {
 	initBentoBlackAnimation();
 	// initServicePageAnimation();
 	initCtaAnimation();
+	initNavbarThemeSwitcher();
 
 	// fade animation
 	const fadeElements = gsap.utils.toArray("[data-animation='fade-in']");

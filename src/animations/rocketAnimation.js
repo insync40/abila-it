@@ -48,8 +48,8 @@ export function initRocketAnimation() {
 						artboard,
 						autoplay: false,
 						layout: new Layout({
-							fit: Fit.Cover,
-							alignment: Alignment.Center,
+							fit: Fit.Contain,
+							alignment: Alignment.BottomCenter,
 						}),
 						isTouchScrollEnabled: true,
 						onLoad: () => {
