@@ -56,7 +56,7 @@ export function initBentoBlackAnimation() {
 						autoplay: false,
 						isTouchScrollEnabled: true,
 						layout: new Layout({
-							fit: Fit.Contain,
+							fit: Fit.Cover,
 							alignment: Alignment.Center,
 						}),
 						onLoad: () => {
