@@ -14,136 +14,147 @@ export function initCtaAnimation() {
 	gsap.context(() => {
 		let mm = gsap.matchMedia();
 
-		mm.add("(min-width: 280px)", () => {
-			const riveUrl = rCtaSource?.dataset?.riveUrl;
-			const stateMachine =
-				rCtaSource?.dataset?.riveStateMachine || "State Machine 1";
+		mm.add(
+			{
+				isDesktop: "(min-width: 992px)",
+				isTablet: "(min-width: 768px) and (max-width: 991px)",
+				isMobile: "(max-width: 767px)",
+			},
+			(context) => {
+				const { isDesktop } = context.conditions;
 
-			if (!riveUrl) {
-				console.error(
-					"Missing Rive URL in #homeRiveSrc dataset (riveUrl)."
-				);
-				return;
-			}
+				const riveUrl = rCtaSource?.dataset?.riveUrl;
+				const stateMachine =
+					rCtaSource?.dataset?.riveStateMachine || "State Machine 1";
 
-			const canvases = [
-				{
-					el: document.querySelector("#cta_glow"),
-					artboard: "cta_glow",
-				},
-			];
+				if (!riveUrl) {
+					console.error(
+						"Missing Rive URL in #homeRiveSrc dataset (riveUrl)."
+					);
+					return;
+				}
 
-			const sm = stateMachine || undefined;
+				const canvases = [
+					{
+						el: document.querySelector("#cta_glow"),
+						artboard: "cta_glow",
+					},
+				];
 
-			const riveInstances = [];
+				const sm = stateMachine || undefined;
 
-			canvases.forEach(({ el, artboard }) => {
-				if (!el) return;
+				const riveInstances = [];
 
-				try {
-					const instance = new Rive({
-						src: riveUrl,
-						canvas: el,
-						stateMachines: sm,
-						artboard,
-						autoplay: false,
-						layout: new Layout({
-							fit: Fit.FitHeight,
-							alignment: Alignment.TopCenter,
-						}),
-						isTouchScrollEnabled: true,
-						onLoad: () => {
-							try {
-								instance.resizeDrawingSurfaceToCanvas();
-							} catch (e) {
-								// ignore resize errors if API not available
-							}
+				canvases.forEach(({ el, artboard }) => {
+					if (!el) return;
 
-							if (sm) {
+					try {
+						const instance = new Rive({
+							src: riveUrl,
+							canvas: el,
+							stateMachines: sm,
+							artboard,
+							autoplay: false,
+							layout: new Layout({
+								fit: Fit.Cover,
+								alignment: Alignment.TopCenter,
+							}),
+							isTouchScrollEnabled: true,
+							onLoad: () => {
 								try {
-									const inputs =
-										instance.stateMachineInputs(sm);
+									instance.resizeDrawingSurfaceToCanvas();
+								} catch (e) {
+									// ignore resize errors if API not available
+								}
 
-									const hoverTrigger =
-										inputs &&
-										inputs.find((i) => i.name === "hover");
+								if (sm) {
+									try {
+										const inputs =
+											instance.stateMachineInputs(sm);
 
-									let hoverState = false;
+										const hoverTrigger =
+											inputs &&
+											inputs.find(
+												(i) => i.name === "hover"
+											);
 
-									if (
-										hoverTrigger &&
-										typeof hoverTrigger.fire === "function"
-									) {
-										ctaBtn.addEventListener(
-											"mouseenter",
-											() => {
-												if (!hoverState) {
+										let hoverState = false;
+
+										if (
+											hoverTrigger &&
+											typeof hoverTrigger.fire ===
+												"function"
+										) {
+											ctaBtn.addEventListener(
+												"mouseenter",
+												() => {
 													hoverTrigger.fire();
 													hoverState = true;
 												}
-											}
-										);
+											);
 
-										ctaBtn.addEventListener(
-											"mouseleave",
-											() => {
-												if (hoverState) {
-													hoverTrigger.fire();
-													hoverState = false;
+											ctaBtn.addEventListener(
+												"mouseleave",
+												() => {
+													if (hoverState) {
+														hoverTrigger.fire();
+														hoverState = false;
+													}
 												}
-											}
-										);
+											);
+										}
+									} catch (e) {
+										// ignore state machine input errors
 									}
-								} catch (e) {
-									// ignore state machine input errors
 								}
-							}
-						},
-						onLoadError: (err) => {
-							console.error("Rive loading error:", err);
-						},
-					});
+							},
+							onLoadError: (err) => {
+								console.error("Rive loading error:", err);
+							},
+						});
 
-					riveInstances.push(instance);
+						riveInstances.push(instance);
 
-					const handlePlay = () => {
-						instance.play();
-					};
+						const handlePlay = () => {
+							instance.play();
+						};
 
-					const handlePause = () => {
-						instance.pause();
-					};
+						const handlePause = () => {
+							instance.pause();
+						};
 
-					ScrollTrigger.create({
-						trigger: el,
-						start: "top bottom",
-						end: "bottom top",
-						onEnter: handlePlay,
-						onLeave: handlePause,
-						onEnterBack: handlePlay,
-						onLeaveBack: handlePause,
-					});
-				} catch (err) {
-					console.error("Failed to create Rive instance:", err);
-				}
-			});
-
-			// cleanup when this media query is torn down
-			return () => {
-				riveInstances.forEach((inst) => {
-					try {
-						// try common cleanup methods if present
-						if (typeof inst.destroy === "function") inst.destroy();
-						else if (typeof inst.cleanup === "function")
-							inst.cleanup();
-						else if (typeof inst.stop === "function") inst.stop();
-						// null reference for GC
-						inst = null;
-					} catch (e) {
-						// swallow cleanup errors
+						ScrollTrigger.create({
+							trigger: el,
+							start: "top bottom",
+							end: "bottom top",
+							onEnter: handlePlay,
+							onLeave: handlePause,
+							onEnterBack: handlePlay,
+							onLeaveBack: handlePause,
+						});
+					} catch (err) {
+						console.error("Failed to create Rive instance:", err);
 					}
 				});
-			};
-		});
+
+				return () => {
+					riveInstances.forEach((inst) => {
+						try {
+							// try common cleanup methods if present
+							if (typeof inst.destroy === "function")
+								inst.destroy();
+							else if (typeof inst.cleanup === "function")
+								inst.cleanup();
+							else if (typeof inst.stop === "function")
+								inst.stop();
+							// null reference for GC
+							inst = null;
+						} catch (e) {
+							// swallow cleanup errors
+						}
+					});
+				};
+			}
+		);
 	}, section);
 }

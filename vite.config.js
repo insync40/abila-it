@@ -33,6 +33,7 @@ export default defineConfig({
 		watch: {
 			usePolling: true,
 		},
+		allowedHosts: ["*.loca.lt", "abila-it.loca.lt"],
 	},
 	preview: {
 		port: 4173,
