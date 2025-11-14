@@ -25,13 +25,7 @@ export default defineConfig({
 				entryFileNames: "[name].js",
 				chunkFileNames: "[name].js",
 				assetFileNames: "[name].[ext]",
-				format: "iife",
-				// Code splitting for better performance
-				manualChunks: {
-					gsap: ["gsap"],
-					rive: ["@rive-app/webgl2"],
-					lenis: ["lenis"],
-				},
+				// format: "iife",
 			},
 		},
 		reportCompressedSize: true,
