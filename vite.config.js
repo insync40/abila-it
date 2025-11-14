@@ -49,11 +49,7 @@ export default defineConfig({
 		watch: {
 			usePolling: true,
 		},
-		allowedHosts: [
-			"*.loca.lt",
-			"abila-it.loca.lt",
-			"abila-it.indrampd.web.id",
-		],
+		allowedHosts: ["*.loca.lt", "abila-it.loca.lt", "dev.indrampd.web.id"],
 	},
 	preview: {
 		port: 4173,
