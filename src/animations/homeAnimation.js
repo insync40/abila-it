@@ -18,7 +18,10 @@ export function initHomeAnimation(lenis) {
 		const rocketEl = section.querySelector(".main_hero_visual_rocket_wrap");
 		const galaxyVisual = section.querySelector(".hero_bg_galaxy");
 
-		const cards = gsap.utils.toArray("[data-animation]", section);
+		const cards = gsap.utils.toArray(
+			".main_hero_visual_status_wrap, .main_hero_visual_problems_wrap, .main_hero_visual_payment_wrap",
+			section
+		);
 		const trigger = section.querySelector("[data-trigger]");
 
 		// get center of visualWrap

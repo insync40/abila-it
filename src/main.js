@@ -38,13 +38,13 @@ document.addEventListener("DOMContentLoaded", () => {
 	initServiceHomeAnimation();
 	initMethodHomeAnimation();
 	initPercheHomeAnimation();
+	initCtaAnimation();
 	initCircleAnimation();
-	initMethodSecondAnimation();
-	autoInitPricingToggle();
 	initBentoWhiteAnimation();
 	initBentoBlackAnimation();
+	initMethodSecondAnimation();
+	autoInitPricingToggle();
 	// initServicePageAnimation();
-	initCtaAnimation();
 	initNavbarThemeSwitcher();
 
 	// fade animation

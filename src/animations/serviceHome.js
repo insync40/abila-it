@@ -13,142 +13,159 @@ export function initServiceHomeAnimation() {
 	gsap.context(() => {
 		let mm = gsap.matchMedia();
 
-		mm.add("(min-width: 280px)", () => {
-			const riveUrl = rSource?.dataset?.riveUrl;
-			const stateMachine =
-				rSource?.dataset?.riveStateMachine || "State Machine 1";
+		mm.add(
+			{
+				isDesktop: "(min-width: 992px)",
+				isTablet: "(min-width: 768px) and (max-width: 991px)",
+				isMobile: "(max-width: 767px)",
+			},
+			(context) => {
+				let { isDesktop, isTablet, isMobile } = context.conditions;
 
-			if (!riveUrl) {
-				console.error(
-					"Missing Rive URL in #homeRiveSrc dataset (riveUrl)."
-				);
-				return;
-			}
+				const riveUrl = rSource?.dataset?.riveUrl;
+				const stateMachine =
+					rSource?.dataset?.riveStateMachine || "State Machine 1";
 
-			const canvases = [
-				{
-					el: document.querySelector("#homebentowhite_01"),
-					artboard: "homebentowhite_01",
-				},
-				{
-					el: document.querySelector("#homebentowhite_02"),
-					artboard: "homebentowhite_02",
-				},
-				{
-					el: document.querySelector("#homebentowhite_03"),
-					artboard: "homebentowhite_03",
-				},
-				{
-					el: document.querySelector("#homebentowhite_04"),
-					artboard: "homebentowhite_04",
-				},
-			];
+				if (!riveUrl) {
+					console.error(
+						"Missing Rive URL in #homeRiveSrc dataset (riveUrl)."
+					);
+					return;
+				}
 
-			const sm = stateMachine || undefined;
+				const canvases = [
+					{
+						el: document.querySelector("#homebentowhite_01"),
+						artboard: "homebentowhite_01",
+					},
+					{
+						el: document.querySelector("#homebentowhite_02"),
+						artboard: "homebentowhite_02",
+					},
+					{
+						el: document.querySelector("#homebentowhite_03"),
+						artboard: "homebentowhite_03",
+					},
+					{
+						el: document.querySelector("#homebentowhite_04"),
+						artboard: "homebentowhite_04",
+					},
+				];
 
-			const riveInstances = [];
+				const sm = stateMachine || undefined;
 
-			canvases.forEach(({ el, artboard }) => {
-				if (!el) return;
+				const riveInstances = [];
 
-				try {
-					const instance = new Rive({
-						src: riveUrl,
-						canvas: el,
-						stateMachines: sm,
-						artboard,
-						autoplay: false,
-						layout: new Layout({
-							fit: Fit.Contain,
-							alignment: Alignment.Center,
-						}),
-						isTouchScrollEnabled: true,
-						onLoad: () => {
-							try {
-								instance.resizeDrawingSurfaceToCanvas();
-							} catch (e) {
-								// ignore resize errors if API not available
-								console.warn("Rive resize error on load:", e);
-							}
+				canvases.forEach(({ el, artboard }) => {
+					if (!el) return;
 
-							if (sm) {
+					try {
+						const instance = new Rive({
+							src: riveUrl,
+							canvas: el,
+							stateMachines: sm,
+							artboard,
+							autoplay: false,
+							layout: new Layout({
+								fit: isDesktop ? Fit.Contain : Fit.Cover,
+								alignment: Alignment.Center,
+							}),
+							isTouchScrollEnabled: true,
+							onLoad: () => {
 								try {
-									const inputs =
-										instance.stateMachineInputs(sm);
-									const playTrigger =
-										inputs &&
-										inputs.find((i) => i.name === "play");
-									if (
-										playTrigger &&
-										typeof playTrigger.fire === "function"
-									) {
-										playTrigger.fire();
-									}
+									instance.resizeDrawingSurfaceToCanvas();
 								} catch (e) {
-									// ignore state machine input errors
+									// ignore resize errors if API not available
 									console.warn(
-										"Rive state machine input error:",
+										"Rive resize error on load:",
 										e
 									);
 								}
+
+								if (sm) {
+									try {
+										const inputs =
+											instance.stateMachineInputs(sm);
+										const playTrigger =
+											inputs &&
+											inputs.find(
+												(i) => i.name === "play"
+											);
+										if (
+											playTrigger &&
+											typeof playTrigger.fire ===
+												"function"
+										) {
+											playTrigger.fire();
+										}
+									} catch (e) {
+										// ignore state machine input errors
+										console.warn(
+											"Rive state machine input error:",
+											e
+										);
+									}
+								}
+							},
+							onLoadError: (err) => {
+								console.error("Rive loading error:", err);
+							},
+						});
+
+						window.addEventListener("resize", () => {
+							try {
+								instance.resizeDrawingSurfaceToCanvas();
+							} catch (e) {
+								console.warn(
+									"Rive resize error on window resize:",
+									e
+								);
 							}
-						},
-						onLoadError: (err) => {
-							console.error("Rive loading error:", err);
-						},
-					});
+						});
 
-					window.addEventListener("resize", () => {
-						try {
-							instance.resizeDrawingSurfaceToCanvas();
-						} catch (e) {
-							console.warn(
-								"Rive resize error on window resize:",
-								e
-							);
-						}
-					});
+						riveInstances.push(instance);
 
-					riveInstances.push(instance);
+						const handlePlay = () => {
+							instance.play();
+						};
 
-					const handlePlay = () => {
-						instance.play();
-					};
+						const handlePause = () => {
+							instance.pause();
+						};
 
-					const handlePause = () => {
-						instance.pause();
-					};
-
-					ScrollTrigger.create({
-						trigger: el,
-						start: "top bottom",
-						end: "bottom top",
-						onEnter: handlePlay,
-						onLeave: handlePause,
-						onEnterBack: handlePlay,
-						onLeaveBack: handlePause,
-					});
-				} catch (err) {
-					console.error("Failed to create Rive instance:", err);
-				}
-			});
-
-			// cleanup when this media query is torn down
-			return () => {
-				riveInstances.forEach((inst) => {
-					try {
-						// try common cleanup methods if present
-						if (typeof inst.destroy === "function") inst.destroy();
-						else if (typeof inst.cleanup === "function")
-							inst.cleanup();
-						else if (typeof inst.stop === "function") inst.stop();
-						// null reference for GC
-						inst = null;
-					} catch (e) {
-						// swallow cleanup errors
+						ScrollTrigger.create({
+							trigger: el,
+							start: "top bottom",
+							end: "bottom top",
+							onEnter: handlePlay,
+							onLeave: handlePause,
+							onEnterBack: handlePlay,
+							onLeaveBack: handlePause,
+						});
+					} catch (err) {
+						console.error("Failed to create Rive instance:", err);
 					}
 				});
-			};
-		});
+
+				// cleanup when this media query is torn down
+				return () => {
+					riveInstances.forEach((inst) => {
+						try {
+							// try common cleanup methods if present
+							if (typeof inst.destroy === "function")
+								inst.destroy();
+							else if (typeof inst.cleanup === "function")
+								inst.cleanup();
+							else if (typeof inst.stop === "function")
+								inst.stop();
+							// null reference for GC
+							inst = null;
+						} catch (e) {
+							// swallow cleanup errors
+						}
+					});
+				};
+			}
+		);
 	}, section);
 }
