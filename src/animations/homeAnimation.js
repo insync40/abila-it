@@ -1,6 +1,7 @@
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Lenis from "lenis";
+import { debounce } from "../utils/debounce.js";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -21,16 +22,35 @@ export function initHomeAnimation(lenis) {
 		const cards = gsap.utils.toArray("[data-animation]", section);
 		const trigger = section.querySelector("[data-trigger]");
 
-		// get center of visualWrap
-		let visualWrapCenter =
-			visualWrap.getBoundingClientRect().left +
-			visualWrap.offsetWidth / 2;
+		// Cache layout values
+		let visualWrapCenter = 0;
+		let cardCenters = [];
 
-		window.addEventListener("resize", () => {
-			visualWrapCenter =
-				visualWrap.getBoundingClientRect().left +
-				visualWrap.offsetWidth / 2;
-		});
+		// Batch read all layout properties
+		const updateLayoutCache = () => {
+			// Use RAF to ensure we're reading after any pending layout changes
+			requestAnimationFrame(() => {
+				const visualRect = visualWrap.getBoundingClientRect();
+				visualWrapCenter = visualRect.left + visualRect.width / 2;
+
+				// Cache all card positions at once
+				cardCenters = cards.map((card) => {
+					const rect = card.getBoundingClientRect();
+					return rect.left + rect.width / 2;
+				});
+			});
+		};
+
+		// Initial cache
+		updateLayoutCache();
+
+		// Debounced resize handler to prevent layout thrashing
+		const debouncedUpdate = debounce(() => {
+			updateLayoutCache();
+			ScrollTrigger.refresh();
+		}, 250);
+
+		window.addEventListener("resize", debouncedUpdate);
 
 		let mm = gsap.matchMedia();
 
@@ -112,10 +132,8 @@ export function initHomeAnimation(lenis) {
 							},
 							{
 								x: () => {
-									const cardCenter =
-										card.getBoundingClientRect().left +
-										card.offsetWidth / 2;
-									return visualWrapCenter - cardCenter;
+									// Use cached values instead of reading layout
+									return visualWrapCenter - cardCenters[i];
 								},
 								scale: 0,
 								// autoAlpha: 0,
@@ -146,5 +164,10 @@ export function initHomeAnimation(lenis) {
 				// end dekstop
 			}
 		);
+
+		// Cleanup
+		return () => {
+			window.removeEventListener("resize", debouncedUpdate);
+		};
 	}, section);
 }

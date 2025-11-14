@@ -8,6 +8,15 @@ export default defineConfig({
 	build: {
 		outDir: "dist",
 		minify: "terser",
+		terserOptions: {
+			compress: {
+				drop_console: true, // Remove console logs in production
+				passes: 2, // Multiple passes for better compression
+			},
+			mangle: {
+				safari10: true, // Support Safari 10
+			},
+		},
 		rollupOptions: {
 			input: {
 				main: resolve(__dirname, "src/main.js"),
@@ -17,9 +26,22 @@ export default defineConfig({
 				chunkFileNames: "[name].js",
 				assetFileNames: "[name].[ext]",
 				format: "iife",
+				// Code splitting for better performance
+				manualChunks: {
+					gsap: ["gsap"],
+					rive: ["@rive-app/webgl2"],
+					lenis: ["lenis"],
+				},
 			},
 		},
 		reportCompressedSize: true,
+		// Enable CSS code splitting
+		cssCodeSplit: true,
+		// Optimize dependencies
+		commonjsOptions: {
+			include: [/node_modules/],
+			transformMixedEsModules: true,
+		},
 	},
 	server: {
 		port: 5173,
@@ -33,7 +55,11 @@ export default defineConfig({
 		watch: {
 			usePolling: true,
 		},
-		allowedHosts: ["*.loca.lt", "abila-it.loca.lt"],
+		allowedHosts: [
+			"*.loca.lt",
+			"abila-it.loca.lt",
+			"abila-it.indrampd.web.id",
+		],
 	},
 	preview: {
 		port: 4173,

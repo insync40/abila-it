@@ -1,4 +1,5 @@
 import gsap from "gsap";
+import { debounce } from "../utils/debounce.js";
 
 export function initCircleAnimation() {
 	const wrap = document.querySelector(".circle_logos_inner");
@@ -11,33 +12,52 @@ export function initCircleAnimation() {
 		let mm = gsap.matchMedia();
 
 		mm.add("(min-width: 992px)", () => {
+			let tl = null;
+
 			const positionCircles = () => {
-				const wrapRect = wrap.getBoundingClientRect();
-				const wrapCenterX = wrapRect.left + wrapRect.width / 2;
-				const wrapCenterY = wrapRect.top + wrapRect.height / 2;
-				const radius = Math.min(wrapRect.width, wrapRect.height) / 2;
+				// Batch all reads first, then all writes
+				requestAnimationFrame(() => {
+					// READ phase - batch all layout reads
+					const wrapRect = wrap.getBoundingClientRect();
+					const wrapCenterX = wrapRect.left + wrapRect.width / 2;
+					const wrapCenterY = wrapRect.top + wrapRect.height / 2;
+					const radius =
+						Math.min(wrapRect.width, wrapRect.height) / 2;
 
-				circles.forEach((circle, index) => {
-					const angle = (index / circles.length) * Math.PI * 2;
-					const x =
-						wrapCenterX +
-						radius * Math.cos(angle) -
-						circle.offsetWidth / 2;
-					const y =
-						wrapCenterY +
-						radius * Math.sin(angle) -
-						circle.offsetHeight / 2;
+					const positions = [];
+					circles.forEach((circle, index) => {
+						const angle = (index / circles.length) * Math.PI * 2;
+						const circleRect = circle.getBoundingClientRect();
+						positions.push({
+							x:
+								wrapCenterX +
+								radius * Math.cos(angle) -
+								circleRect.width / 2,
+							y:
+								wrapCenterY +
+								radius * Math.sin(angle) -
+								circleRect.height / 2,
+							left: circleRect.left,
+							top: circleRect.top,
+						});
+					});
 
-					gsap.set(circle, {
-						x: x - circle.getBoundingClientRect().left,
-						y: y - circle.getBoundingClientRect().top,
+					// WRITE phase - batch all DOM writes
+					requestAnimationFrame(() => {
+						circles.forEach((circle, index) => {
+							const pos = positions[index];
+							gsap.set(circle, {
+								x: pos.x - pos.left,
+								y: pos.y - pos.top,
+							});
+						});
 					});
 				});
 			};
 
 			positionCircles();
 
-			const tl = gsap.timeline({
+			tl = gsap.timeline({
 				scrollTrigger: {
 					trigger: wrap,
 					start: "top bottom",
@@ -75,13 +95,16 @@ export function initCircleAnimation() {
 				0
 			);
 
-			// window.addEventListener("resize", () => {
-			// 	positionCircles();
-			// });
+			// Debounced resize handler
+			const debouncedResize = debounce(() => {
+				positionCircles();
+			}, 250);
+
+			window.addEventListener("resize", debouncedResize);
 
 			return () => {
-				tl.kill();
-				// window.removeEventListener("resize", positionCircles);
+				if (tl) tl.kill();
+				window.removeEventListener("resize", debouncedResize);
 			};
 		});
 	}, wrap);

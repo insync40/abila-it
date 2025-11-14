@@ -1,0 +1,74 @@
+/**
+ * Performance Optimizations CSS
+ * Reduces reflows and improves rendering performance
+ */
+
+/* Contain layout calculations to specific elements */
+.main_hero_wrap,
+.main_service_wrap,
+.method_home_wrap {
+	contain: layout style;
+}
+
+/* Optimize elements that will be animated */
+[data-animation] {
+	will-change: transform, opacity;
+	contain: layout paint;
+}
+
+/* Remove will-change after animations complete (handled by JS) */
+[data-animation].animation-complete {
+	will-change: auto;
+}
+
+/* Optimize canvas elements */
+canvas {
+	contain: strict;
+	content-visibility: auto;
+}
+
+/* Improve scroll performance */
+.circle_logos_inner {
+	contain: layout style paint;
+}
+
+/* Optimize pinned sections */
+[data-trigger] {
+	contain: layout;
+}
+
+/* Reduce reflow for rocket animation */
+.main_hero_visual_rocket_wrap {
+	contain: layout style;
+	will-change: transform;
+}
+
+/* Optimize hero visual wrap */
+.main_hero_visual_wrap {
+	contain: layout style;
+}
+
+/* Lazy-loaded sections should use content-visibility */
+.main_service_wrap,
+.method_home_wrap,
+[data-rive="bento-white"],
+[data-rive="bento-black"] {
+	content-visibility: auto;
+	contain-intrinsic-size: 0 500px; /* Adjust based on your section heights */
+}
+
+/* GPU acceleration for frequently animated elements */
+.nav_component {
+	transform: translateZ(0);
+	backface-visibility: hidden;
+}
+
+/* Optimize fade-in elements */
+[data-animation="fade-in"] {
+	visibility: hidden; /* Prevent FOUC */
+}
+
+/* Reduce paint areas */
+.hero_bg_galaxy {
+	will-change: background-position;
+}

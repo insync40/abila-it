@@ -1,6 +1,7 @@
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Alignment, Fit, Layout, Rive } from "@rive-app/webgl2";
+import { debounce } from "../utils/debounce.js";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -61,30 +62,35 @@ export function initHeroHomeAnimation() {
 						}),
 						isTouchScrollEnabled: true,
 						onLoad: () => {
-							// resize and trigger "Play" if state machine has it
-							try {
-								instance.resizeDrawingSurfaceToCanvas();
-							} catch (e) {
-								// ignore resize errors if API not available
-							}
-
-							if (sm) {
+							// Defer resize to avoid blocking
+							requestAnimationFrame(() => {
 								try {
-									const inputs =
-										instance.stateMachineInputs(sm);
-									const playTrigger =
-										inputs &&
-										inputs.find((i) => i.name === "play");
-									if (
-										playTrigger &&
-										typeof playTrigger.fire === "function"
-									) {
-										playTrigger.fire();
-									}
+									instance.resizeDrawingSurfaceToCanvas();
 								} catch (e) {
-									// ignore state machine input errors
+									// ignore resize errors if API not available
 								}
-							}
+
+								if (sm) {
+									try {
+										const inputs =
+											instance.stateMachineInputs(sm);
+										const playTrigger =
+											inputs &&
+											inputs.find(
+												(i) => i.name === "play"
+											);
+										if (
+											playTrigger &&
+											typeof playTrigger.fire ===
+												"function"
+										) {
+											playTrigger.fire();
+										}
+									} catch (e) {
+										// ignore state machine input errors
+									}
+								}
+							});
 						},
 						onLoadError: (err) => {
 							console.error("Rive loading error:", err);
