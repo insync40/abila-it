@@ -14,6 +14,7 @@ import { initRocketAnimation } from "./animations/rocketAnimation.js";
 import { initBentoBlackAnimation } from "./animations/bentoBlackAnimation.js";
 import { initBentoWhiteAnimation } from "./animations/bentoWhiteAnimation.js";
 import { initNavbarThemeSwitcher } from "./animations/navbarThemeSwitcher.js";
+import { initClientSliderAnimation } from "./animations/clientSlider.js";
 
 let lenis = new Lenis({
 	lerp: 0.125,
@@ -43,8 +44,8 @@ document.addEventListener("DOMContentLoaded", () => {
 	initBentoWhiteAnimation();
 	initBentoBlackAnimation();
 	initMethodSecondAnimation();
+	initClientSliderAnimation();
 	autoInitPricingToggle();
-	// initServicePageAnimation();
 	initNavbarThemeSwitcher();
 
 	// fade animation
