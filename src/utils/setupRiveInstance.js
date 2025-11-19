@@ -2,6 +2,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Rive, Layout, Fit } from "@rive-app/webgl2";
 
+
 gsap.registerPlugin(ScrollTrigger);
 
 const riveInstances = [];

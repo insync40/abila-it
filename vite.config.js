@@ -16,7 +16,7 @@ export default defineConfig({
 				entryFileNames: "[name].js",
 				chunkFileNames: "[name].js",
 				assetFileNames: "[name].[ext]",
-				format: "iife",
+				format: "esm",
 			},
 		},
 		reportCompressedSize: true,
@@ -33,7 +33,7 @@ export default defineConfig({
 		watch: {
 			usePolling: true,
 		},
-		allowedHosts: ["*.loca.lt", "abila-it.loca.lt", "dev.indrampd.web.id"],
+		allowedHosts: ["dev.indrampd.web.id"],
 	},
 	preview: {
 		port: 4173,
