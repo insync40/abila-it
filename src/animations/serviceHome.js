@@ -34,22 +34,22 @@ export function initServiceHomeAnimation() {
 				}
 
 				const canvases = [
-					{
-						el: document.querySelector("#homebentowhite_01"),
-						artboard: "homebentowhite_01",
-					},
+					// {
+					// 	el: document.querySelector("#homebentowhite_01"),
+					// 	artboard: "homebentowhite_01",
+					// },
 					{
 						el: document.querySelector("#homebentowhite_02"),
 						artboard: "homebentowhite_02",
 					},
-					{
-						el: document.querySelector("#homebentowhite_03"),
-						artboard: "homebentowhite_03",
-					},
-					{
-						el: document.querySelector("#homebentowhite_04"),
-						artboard: "homebentowhite_04",
-					},
+					// {
+					// 	el: document.querySelector("#homebentowhite_03"),
+					// 	artboard: "homebentowhite_03",
+					// },
+					// {
+					// 	el: document.querySelector("#homebentowhite_04"),
+					// 	artboard: "homebentowhite_04",
+					// },
 				];
 
 				const sm = stateMachine || undefined;

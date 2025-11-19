@@ -1,20 +1,19 @@
 import gsap from "gsap";
 import Lenis from "lenis";
-import { initHeroHomeAnimation } from "./animations/heroHome.js";
+import { initHeroRiveAnimation } from "./animations/heroRiveAnimation.js";
 import { initServiceHomeAnimation } from "./animations/serviceHome.js";
-import { initPercheHomeAnimation } from "./animations/percheHome.js";
 import { initCtaAnimation } from "./animations/ctaAnimation.js";
-import { initMethodHomeAnimation } from "./animations/methodHome.js";
 import { initCircleAnimation } from "./animations/circleAnimation.js";
 import { initFadeAnimation } from "./animations/fadeAnimation.js";
-import { initHomeAnimation } from "./animations/homeAnimation.js";
+import { initHomeHeroAnimation } from "./animations/homeHeroAnimation.js";
 import { initMethodSecondAnimation } from "./animations/methodSecondAnimation.js";
 import { autoInitPricingToggle } from "./utils/pricingToggle.js";
-import { initRocketAnimation } from "./animations/rocketAnimation.js";
+import { initRocketRiveAnimation } from "./animations/rocketRiveAnimation.js";
 import { initBentoBlackAnimation } from "./animations/bentoBlackAnimation.js";
 import { initBentoWhiteAnimation } from "./animations/bentoWhiteAnimation.js";
 import { initNavbarThemeSwitcher } from "./animations/navbarThemeSwitcher.js";
 import { initClientSliderAnimation } from "./animations/clientSlider.js";
+import { initMethodHomeAnimation } from "./animations/methodHome.js";
 
 let lenis = new Lenis({
 	lerp: 0.125,
@@ -33,18 +32,18 @@ function raf(time) {
 requestAnimationFrame(raf);
 
 document.addEventListener("DOMContentLoaded", () => {
-	initHomeAnimation(lenis);
-	initRocketAnimation();
-	initHeroHomeAnimation();
-	initServiceHomeAnimation();
+	// Home
+	initHomeHeroAnimation();
+	initHeroRiveAnimation();
+	initRocketRiveAnimation();
 	initMethodHomeAnimation();
-	initPercheHomeAnimation();
-	initCtaAnimation();
+	initServiceHomeAnimation();
 	initCircleAnimation();
+	initClientSliderAnimation();
+	initCtaAnimation();
 	initBentoWhiteAnimation();
 	initBentoBlackAnimation();
 	initMethodSecondAnimation();
-	initClientSliderAnimation();
 	autoInitPricingToggle();
 	initNavbarThemeSwitcher();
 

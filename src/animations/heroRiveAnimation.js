@@ -1,42 +1,50 @@
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { Rive, Layout, Fit, Alignment } from "@rive-app/webgl2";
-import { loadRiveFile } from "../utils/loadRiveFile";
-import { setupRiveInstance } from "../utils/setupRiveInstance";
+import { Alignment, Fit, Layout, Rive } from "@rive-app/webgl2";
 
 gsap.registerPlugin(ScrollTrigger);
 
-export function initRocketAnimation() {
+export function initHeroRiveAnimation() {
 	const section = document.querySelector(".main_hero_wrap");
-	const rSource = section?.querySelector("#rocketRiveSrc");
+	const rSource = document.querySelector("#homeRiveSrc");
 
 	if (!section) return;
 
-	gsap.context((self) => {
+	gsap.context(() => {
 		let mm = gsap.matchMedia();
 
-		mm.add("(min-width: 280px)", () => {
+		mm.add("(min-width: 992px)", () => {
 			const riveUrl = rSource?.dataset?.riveUrl;
 			const stateMachine =
 				rSource?.dataset?.riveStateMachine || "State Machine 1";
 
 			if (!riveUrl) {
 				console.error(
-					"Missing Rive URL in #rocketRiveSrc dataset (riveUrl)."
+					"Missing Rive URL in #homeRiveSrc dataset (riveUrl)."
 				);
 				return;
 			}
 
 			const canvases = [
 				{
-					el: document.querySelector("#rocket_glow"),
-					artboard: "rocket_glow",
+					el: document.querySelector("#floatingcardhero_01"),
+					artboard: "floatingcardhero_01",
+				},
+				{
+					el: document.querySelector("#floatingcardhero_02"),
+					artboard: "floatingcardhero_02",
+				},
+				{
+					el: document.querySelector("#floatingcardhero_03"),
+					artboard: "floatingcardhero_03",
 				},
 			];
 
 			const sm = stateMachine || undefined;
 
+			// Initialize Rive for all canvases
 			const riveInstances = [];
+
 			canvases.forEach(({ el, artboard }) => {
 				if (!el) return;
 
@@ -49,15 +57,15 @@ export function initRocketAnimation() {
 						autoplay: false,
 						layout: new Layout({
 							fit: Fit.Contain,
-							alignment: Alignment.BottomCenter,
+							alignment: Alignment.Center,
 						}),
 						isTouchScrollEnabled: true,
 						onLoad: () => {
+							// resize and trigger "Play" if state machine has it
 							try {
 								instance.resizeDrawingSurfaceToCanvas();
 							} catch (e) {
 								// ignore resize errors if API not available
-								console.error("Rive resize error:", e);
 							}
 
 							if (sm) {
@@ -75,10 +83,6 @@ export function initRocketAnimation() {
 									}
 								} catch (e) {
 									// ignore state machine input errors
-									console.error(
-										"Rive state machine input error:",
-										e
-									);
 								}
 							}
 						},
@@ -99,7 +103,7 @@ export function initRocketAnimation() {
 
 					ScrollTrigger.create({
 						trigger: el,
-						start: "top bottom-=05%",
+						start: "top bottom",
 						end: "bottom top",
 						onEnter: handlePlay,
 						onLeave: handlePause,
@@ -128,24 +132,24 @@ export function initRocketAnimation() {
 				});
 			};
 		});
-	});
+	}, section);
 }
 
-// export function initRocketAnimation() {
+// export function initHeroHomeAnimation() {
 // 	const section = document.querySelector(".main_hero_wrap");
-// 	const rSource = section?.querySelector("#rocketRiveSrc");
+// 	const rSource = document.querySelector("#homeRiveSrc");
 
 // 	if (!section) return;
 
-// 	gsap.context((self) => {
+// 	gsap.context(() => {
 // 		let mm = gsap.matchMedia();
 
-// 		mm.add("(min-width: 320px)", () => {
+// 		mm.add("(min-width: 992px)", () => {
 // 			const riveUrl = rSource?.dataset?.riveUrl;
 
 // 			if (!riveUrl) {
 // 				console.error(
-// 					"Missing Rive URL in #rocketRiveSrc dataset (riveUrl)."
+// 					"Missing Rive URL in #homeRiveSrc dataset (riveUrl)."
 // 				);
 // 				return;
 // 			}
@@ -155,8 +159,20 @@ export function initRocketAnimation() {
 // 				(file) => {
 // 					setupRiveInstance(
 // 						file,
-// 						"rocket_glow",
-// 						"rocket_glow",
+// 						"floatingcardhero_01",
+// 						"floatingcardhero_01",
+// 						"State Machine 1"
+// 					);
+// 					setupRiveInstance(
+// 						file,
+// 						"floatingcardhero_02",
+// 						"floatingcardhero_02",
+// 						"State Machine 1"
+// 					);
+// 					setupRiveInstance(
+// 						file,
+// 						"floatingcardhero_03",
+// 						"floatingcardhero_03",
 // 						"State Machine 1"
 // 					);
 // 				},
@@ -165,5 +181,5 @@ export function initRocketAnimation() {
 // 				}
 // 			);
 // 		});
-// 	});
+// 	}, section);
 // }

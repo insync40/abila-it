@@ -1,50 +1,40 @@
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { Alignment, Fit, Layout, Rive } from "@rive-app/webgl2";
+import { Rive, Layout, Fit, Alignment } from "@rive-app/webgl2";
 
 gsap.registerPlugin(ScrollTrigger);
 
-export function initHeroHomeAnimation() {
+export function initRocketRiveAnimation() {
 	const section = document.querySelector(".main_hero_wrap");
-	const rSource = document.querySelector("#homeRiveSrc");
+	const rSource = section?.querySelector("#rocketRiveSrc");
 
 	if (!section) return;
 
-	gsap.context(() => {
+	gsap.context((self) => {
 		let mm = gsap.matchMedia();
 
-		mm.add("(min-width: 992px)", () => {
+		mm.add("(min-width: 280px)", () => {
 			const riveUrl = rSource?.dataset?.riveUrl;
 			const stateMachine =
 				rSource?.dataset?.riveStateMachine || "State Machine 1";
 
 			if (!riveUrl) {
 				console.error(
-					"Missing Rive URL in #homeRiveSrc dataset (riveUrl)."
+					"Missing Rive URL in #rocketRiveSrc dataset (riveUrl)."
 				);
 				return;
 			}
 
 			const canvases = [
 				{
-					el: document.querySelector("#floatingcardhero_01"),
-					artboard: "floatingcardhero_01",
-				},
-				{
-					el: document.querySelector("#floatingcardhero_02"),
-					artboard: "floatingcardhero_02",
-				},
-				{
-					el: document.querySelector("#floatingcardhero_03"),
-					artboard: "floatingcardhero_03",
+					el: document.querySelector("#rocket_glow"),
+					artboard: "rocket_glow",
 				},
 			];
 
 			const sm = stateMachine || undefined;
 
-			// Initialize Rive for all canvases
 			const riveInstances = [];
-
 			canvases.forEach(({ el, artboard }) => {
 				if (!el) return;
 
@@ -57,15 +47,15 @@ export function initHeroHomeAnimation() {
 						autoplay: false,
 						layout: new Layout({
 							fit: Fit.Contain,
-							alignment: Alignment.Center,
+							alignment: Alignment.BottomCenter,
 						}),
 						isTouchScrollEnabled: true,
 						onLoad: () => {
-							// resize and trigger "Play" if state machine has it
 							try {
 								instance.resizeDrawingSurfaceToCanvas();
 							} catch (e) {
 								// ignore resize errors if API not available
+								console.error("Rive resize error:", e);
 							}
 
 							if (sm) {
@@ -83,6 +73,10 @@ export function initHeroHomeAnimation() {
 									}
 								} catch (e) {
 									// ignore state machine input errors
+									console.error(
+										"Rive state machine input error:",
+										e
+									);
 								}
 							}
 						},
@@ -103,7 +97,7 @@ export function initHeroHomeAnimation() {
 
 					ScrollTrigger.create({
 						trigger: el,
-						start: "top bottom",
+						start: "top bottom-=05%",
 						end: "bottom top",
 						onEnter: handlePlay,
 						onLeave: handlePause,
@@ -132,54 +126,5 @@ export function initHeroHomeAnimation() {
 				});
 			};
 		});
-	}, section);
+	});
 }
-
-// export function initHeroHomeAnimation() {
-// 	const section = document.querySelector(".main_hero_wrap");
-// 	const rSource = document.querySelector("#homeRiveSrc");
-
-// 	if (!section) return;
-
-// 	gsap.context(() => {
-// 		let mm = gsap.matchMedia();
-
-// 		mm.add("(min-width: 992px)", () => {
-// 			const riveUrl = rSource?.dataset?.riveUrl;
-
-// 			if (!riveUrl) {
-// 				console.error(
-// 					"Missing Rive URL in #homeRiveSrc dataset (riveUrl)."
-// 				);
-// 				return;
-// 			}
-
-// 			loadRiveFile(
-// 				riveUrl,
-// 				(file) => {
-// 					setupRiveInstance(
-// 						file,
-// 						"floatingcardhero_01",
-// 						"floatingcardhero_01",
-// 						"State Machine 1"
-// 					);
-// 					setupRiveInstance(
-// 						file,
-// 						"floatingcardhero_02",
-// 						"floatingcardhero_02",
-// 						"State Machine 1"
-// 					);
-// 					setupRiveInstance(
-// 						file,
-// 						"floatingcardhero_03",
-// 						"floatingcardhero_03",
-// 						"State Machine 1"
-// 					);
-// 				},
-// 				(error) => {
-// 					console.error("Failed to load Rive file:", error);
-// 				}
-// 			);
-// 		});
-// 	}, section);
-// }

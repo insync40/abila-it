@@ -46,136 +46,138 @@ export function initMethodHomeAnimation() {
 		});
 	}
 
-	gsap.context((self) => {
-		let mm = gsap.matchMedia();
+	initSwiper();
 
-		mm.add("(min-width: 280px)", () => {
-			const riveUrl = rSource?.dataset?.riveUrl;
-			const stateMachine =
-				rSource?.dataset?.riveStateMachine || "State Machine 1";
+	// gsap.context(() => {
+	// 	let mm = gsap.matchMedia();
 
-			if (!riveUrl) {
-				console.error(
-					"Missing Rive URL in #homeRiveSrc dataset (riveUrl)."
-				);
-				return;
-			}
+	// 	mm.add("(min-width: 280px)", () => {
+	// 		const riveUrl = rSource?.dataset?.riveUrl;
+	// 		const stateMachine =
+	// 			rSource?.dataset?.riveStateMachine || "State Machine 1";
 
-			const canvases = [
-				{
-					el: document.querySelector("#card_01"),
-					artboard: "card_01",
-				},
-				{
-					el: document.querySelector("#card_02"),
-					artboard: "card_02",
-				},
-				{
-					el: document.querySelector("#card_03"),
-					artboard: "card_03",
-				},
-			];
+	// 		if (!riveUrl) {
+	// 			console.error(
+	// 				"Missing Rive URL in #homeRiveSrc dataset (riveUrl)."
+	// 			);
+	// 			return;
+	// 		}
 
-			const sm = stateMachine || undefined;
+	// 		const canvases = [
+	// 			{
+	// 				el: document.querySelector("#card_01"),
+	// 				artboard: "card_01",
+	// 			},
+	// 			{
+	// 				el: document.querySelector("#card_02"),
+	// 				artboard: "card_02",
+	// 			},
+	// 			{
+	// 				el: document.querySelector("#card_03"),
+	// 				artboard: "card_03",
+	// 			},
+	// 		];
 
-			const riveInstances = [];
+	// 		const sm = stateMachine || undefined;
 
-			canvases.forEach(({ el, artboard }) => {
-				if (!el) return;
+	// 		const riveInstances = [];
 
-				try {
-					const instance = new Rive({
-						src: riveUrl,
-						canvas: el,
-						stateMachines: sm,
-						artboard,
-						autoplay: false,
-						layout: new Layout({
-							fit: Fit.Contain,
-							alignment: Alignment.Center,
-						}),
-						isTouchScrollEnabled: true,
-						onLoad: () => {
-							try {
-								instance.resizeDrawingSurfaceToCanvas();
-							} catch (e) {
-								// ignore resize errors if API not available
-							}
+	// 		canvases.forEach(({ el, artboard }) => {
+	// 			if (!el) return;
 
-							if (sm) {
-								try {
-									const inputs =
-										instance.stateMachineInputs(sm);
-									const playTrigger =
-										inputs &&
-										inputs.find((i) => i.name === "play");
-									if (
-										playTrigger &&
-										typeof playTrigger.fire === "function"
-									) {
-										playTrigger.fire();
-									}
-								} catch (e) {
-									// ignore state machine input errors
-								}
-							}
-						},
-						onLoadError: (err) => {
-							console.error("Rive loading error:", err);
-						},
-					});
+	// 			try {
+	// 				const instance = new Rive({
+	// 					src: riveUrl,
+	// 					canvas: el,
+	// 					stateMachines: sm,
+	// 					artboard,
+	// 					autoplay: false,
+	// 					layout: new Layout({
+	// 						fit: Fit.Contain,
+	// 						alignment: Alignment.Center,
+	// 					}),
+	// 					isTouchScrollEnabled: true,
+	// 					onLoad: () => {
+	// 						try {
+	// 							instance.resizeDrawingSurfaceToCanvas();
+	// 						} catch (e) {
+	// 							// ignore resize errors if API not available
+	// 						}
 
-					riveInstances.push(instance);
+	// 						if (sm) {
+	// 							try {
+	// 								const inputs =
+	// 									instance.stateMachineInputs(sm);
+	// 								const playTrigger =
+	// 									inputs &&
+	// 									inputs.find((i) => i.name === "play");
+	// 								if (
+	// 									playTrigger &&
+	// 									typeof playTrigger.fire === "function"
+	// 								) {
+	// 									playTrigger.fire();
+	// 								}
+	// 							} catch (e) {
+	// 								// ignore state machine input errors
+	// 							}
+	// 						}
+	// 					},
+	// 					onLoadError: (err) => {
+	// 						console.error("Rive loading error:", err);
+	// 					},
+	// 				});
 
-					const handlePlay = () => {
-						instance.play();
-					};
+	// 				riveInstances.push(instance);
 
-					const handlePause = () => {
-						instance.pause();
-					};
+	// 				const handlePlay = () => {
+	// 					instance.play();
+	// 				};
 
-					ScrollTrigger.create({
-						trigger: el,
-						start: "top bottom",
-						end: "bottom top",
-						onEnter: handlePlay,
-						onLeave: handlePause,
-						onEnterBack: handlePlay,
-						onLeaveBack: handlePause,
-					});
-				} catch (err) {
-					console.error("Failed to create Rive instance:", err);
-				}
-			});
+	// 				const handlePause = () => {
+	// 					instance.pause();
+	// 				};
 
-			// cleanup when this media query is torn down
-			return () => {
-				riveInstances.forEach((inst) => {
-					try {
-						// try common cleanup methods if present
-						if (typeof inst.destroy === "function") inst.destroy();
-						else if (typeof inst.cleanup === "function")
-							inst.cleanup();
-						else if (typeof inst.stop === "function") inst.stop();
-						// null reference for GC
-						inst = null;
-					} catch (e) {
-						// swallow cleanup errors
-					}
-				});
-			};
-		});
+	// 				ScrollTrigger.create({
+	// 					trigger: el,
+	// 					start: "top bottom",
+	// 					end: "bottom top",
+	// 					onEnter: handlePlay,
+	// 					onLeave: handlePause,
+	// 					onEnterBack: handlePlay,
+	// 					onLeaveBack: handlePause,
+	// 				});
+	// 			} catch (err) {
+	// 				console.error("Failed to create Rive instance:", err);
+	// 			}
+	// 		});
 
-		mm.add("(min-width: 992px)", () => {
-			initSwiper();
+	// 		// cleanup when this media query is torn down
+	// 		return () => {
+	// 			riveInstances.forEach((inst) => {
+	// 				try {
+	// 					// try common cleanup methods if present
+	// 					if (typeof inst.destroy === "function") inst.destroy();
+	// 					else if (typeof inst.cleanup === "function")
+	// 						inst.cleanup();
+	// 					else if (typeof inst.stop === "function") inst.stop();
+	// 					// null reference for GC
+	// 					inst = null;
+	// 				} catch (e) {
+	// 					// swallow cleanup errors
+	// 				}
+	// 			});
+	// 		};
+	// 	});
 
-			return () => {
-				if (swiperInstance) {
-					swiperInstance.destroy(true, true);
-					swiperInstance = null;
-				}
-			};
-		});
-	}, section);
+	// 	mm.add("(min-width: 992px)", () => {
+	// 		initSwiper();
+
+	// 		return () => {
+	// 			if (swiperInstance) {
+	// 				swiperInstance.destroy(true, true);
+	// 				swiperInstance = null;
+	// 			}
+	// 		};
+	// 	});
+	// }, section);
 }

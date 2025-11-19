@@ -1,18 +1,14 @@
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import Lenis from "lenis";
 
 gsap.registerPlugin(ScrollTrigger);
 
-export function initHomeAnimation(lenis) {
+export function initHomeHeroAnimation() {
 	const section = document.querySelector(".main_hero_wrap");
 
 	if (!section) return;
 
-	// ensure the page is on top on load
-	lenis.scrollTo(0, { immediate: true });
-
-	gsap.context((self) => {
+	gsap.context(() => {
 		const headerWrap = section.querySelector(".main_hero_head_wrap");
 		const visualWrap = section.querySelector(".main_hero_visual_wrap");
 		const rocketEl = section.querySelector(".main_hero_visual_rocket_wrap");
@@ -24,16 +20,11 @@ export function initHomeAnimation(lenis) {
 		);
 		const trigger = section.querySelector("[data-trigger]");
 
-		// get center of visualWrap
-		let visualWrapCenter =
-			visualWrap.getBoundingClientRect().left +
-			visualWrap.offsetWidth / 2;
-
-		window.addEventListener("resize", () => {
-			visualWrapCenter =
-				visualWrap.getBoundingClientRect().left +
-				visualWrap.offsetWidth / 2;
-		});
+		// Performance optimization: Hint browser about changes
+		gsap.set([headerWrap, rocketEl, ...cards], { willChange: "transform" });
+		if (galaxyVisual) {
+			gsap.set(galaxyVisual, { willChange: "background-position" });
+		}
 
 		let mm = gsap.matchMedia();
 
@@ -43,7 +34,8 @@ export function initHomeAnimation(lenis) {
 				mobile: "(max-width: 991px)",
 			},
 			(context) => {
-				let { desktop, mobile } = context.conditions;
+				let { desktop } = context.conditions;
+
 				const rocketAnim = gsap.to(rocketEl, {
 					keyframes: {
 						yPercent: [0, -10, 10, -10, 0],
@@ -52,6 +44,7 @@ export function initHomeAnimation(lenis) {
 					duration: 10,
 					repeat: -1,
 					paused: true,
+					force3D: true,
 				});
 
 				if (desktop) {
@@ -74,6 +67,7 @@ export function initHomeAnimation(lenis) {
 						autoAlpha: 0,
 						ease: "none",
 						transformOrigin: "top center",
+						force3D: true,
 					});
 
 					const secondTl = gsap.timeline({
@@ -104,25 +98,27 @@ export function initHomeAnimation(lenis) {
 						},
 					});
 
-					cards.forEach((card, i) => {
+					cards.forEach((card) => {
 						secondTl.fromTo(
 							card,
 							{
 								x: 0,
 								scale: 1,
-								// autoAlpha: 1,
 								transformOrigin: "center bottom",
 							},
 							{
 								x: () => {
+									const visualWrapCenter =
+										visualWrap.getBoundingClientRect().left +
+										visualWrap.offsetWidth / 2;
 									const cardCenter =
 										card.getBoundingClientRect().left +
 										card.offsetWidth / 2;
 									return visualWrapCenter - cardCenter;
 								},
 								scale: 0,
-								// autoAlpha: 0,
 								ease: "none",
+								force3D: true,
 							},
 							0
 						);
@@ -137,16 +133,17 @@ export function initHomeAnimation(lenis) {
 						},
 					});
 
-					thirdTl.to(
-						galaxyVisual,
-						{
-							backgroundPosition: "50% -50%",
-							ease: "none",
-						},
-						0
-					);
+					if (galaxyVisual) {
+						thirdTl.to(
+							galaxyVisual,
+							{
+								backgroundPosition: "50% -50%",
+								ease: "none",
+							},
+							0
+						);
+					}
 				}
-				// end dekstop
 			}
 		);
 	}, section);
