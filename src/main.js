@@ -2,7 +2,6 @@ import gsap from "gsap";
 import Lenis from "lenis";
 import { initHeroRiveAnimation } from "./animations/heroRiveAnimation.js";
 import { initServiceHomeAnimation } from "./animations/serviceHome.js";
-import { initCtaAnimation } from "./animations/ctaAnimation.js";
 import { initCircleAnimation } from "./animations/circleAnimation.js";
 import { initFadeAnimation } from "./animations/fadeAnimation.js";
 import { initHomeHeroAnimation } from "./animations/homeHeroAnimation.js";
@@ -40,7 +39,6 @@ document.addEventListener("DOMContentLoaded", () => {
 	initServiceHomeAnimation();
 	initCircleAnimation();
 	initClientSliderAnimation();
-	initCtaAnimation();
 	initBentoWhiteAnimation();
 	initBentoBlackAnimation();
 	initMethodSecondAnimation();
