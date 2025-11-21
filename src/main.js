@@ -33,15 +33,15 @@ requestAnimationFrame(raf);
 document.addEventListener("DOMContentLoaded", () => {
 	// Home
 	initHomeHeroAnimation();
-	initHeroRiveAnimation();
-	initRocketRiveAnimation();
+	// initHeroRiveAnimation();
+	// initRocketRiveAnimation();
+	// initServiceHomeAnimation();
 	initMethodHomeAnimation();
-	initServiceHomeAnimation();
 	initCircleAnimation();
 	initClientSliderAnimation();
-	initBentoWhiteAnimation();
-	initBentoBlackAnimation();
-	initMethodSecondAnimation();
+	// initBentoWhiteAnimation();
+	// initBentoBlackAnimation();
+	// initMethodSecondAnimation();
 	autoInitPricingToggle();
 	initNavbarThemeSwitcher();
 
