@@ -1,0 +1,18 @@
+{
+    "tabWidth": 4,
+    "trailingComma": "all",
+    "endOfLine": "auto",
+    "importOrder": [
+        "<THIRD_PARTY_MODULES>",
+        "",
+        "",
+        "^~/core/(.*)$",
+        "^~/utils/(.*)$",
+        "^~/components/(.*)$",
+        "^~/styles/(.*)$",
+        "^~/(.*)$",
+        "^[./]"
+    ],
+    "importOrderSeparation": true,
+    "importOrderSortSpecifiers": true
+}
